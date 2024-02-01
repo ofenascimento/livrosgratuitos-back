@@ -13,6 +13,9 @@ async function getLivros(req, res) {
         if (req.query.autor) {
             query.autor = req.query.autor;
         }
+        if (req.query.destaque) {
+            query.destaque = req.query.destaque === 'true'
+        }
 
         const livros = await Livro.find(query);
         res.json(livros);

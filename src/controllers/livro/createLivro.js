@@ -7,7 +7,8 @@ async function createLivro(req, res) {
         descricao: req.body.descricao,
         categoria: req.body.categoria,
         urlCapa: req.body.urlCapa,
-        urlConteudo: req.body.urlConteudo
+        urlConteudo: req.body.urlConteudo,
+        destaque: req.body.destaque
     })
 
     try {

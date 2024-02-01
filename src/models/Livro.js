@@ -13,6 +13,10 @@ const livroSchema = new mongoose.Schema({
   categoria: String,
   urlCapa: String,
   urlConteudo: String,
+  destaque: {
+    type: Boolean,
+    default: false
+  }
 })
 
 const Livro = mongoose.model('Livro', livroSchema)
