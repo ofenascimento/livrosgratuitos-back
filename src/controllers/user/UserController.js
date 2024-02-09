@@ -31,6 +31,22 @@ async function login(req, res) {
     }
 }
 
+async function deleteUser(req, res) {
+    const userId = req.params.userId; 
+
+    try {
+        const user = await User.findByIdAndDelete(userId);
+
+        if (!user) {
+            return res.status(404).json({ message: 'Usuário não encontrado.' });
+        }
+
+        res.status(200).json({ message: 'Usuário deletado com sucesso.' });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+}
+
 async function addFavorite(req, res) {
     const userId = req.params.userId;
     const bookId = req.body.bookId;
@@ -92,4 +108,4 @@ async function getFavoriteBooksById(req, res) {
     }
 }
 
-module.exports = { register, login, addFavorite, removeFavorite, getFavoriteBooksById };
+module.exports = { register, login, addFavorite, removeFavorite, getFavoriteBooksById, deleteUser };
