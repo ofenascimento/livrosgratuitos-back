@@ -3,7 +3,7 @@ const router = express.Router();
 
 const UserController = require("../controllers/user/UserController");
 
-router.put('/register', UserController.register);
+router.post('/register', UserController.register);
 router.post('/login', UserController.login);
 router.delete('/delete-user/:userId', UserController.deleteUser);
 

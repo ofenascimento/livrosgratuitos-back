@@ -4,24 +4,32 @@ const jwt = require('jsonwebtoken')
 
 async function register(req, res) {
     try {
+
+        const emailExist = await User.findOne({email: req.body.email})
+        if(emailExist) return res.status(400).json({ message: 'E-mail já cadastrado' });
+
         const newUser = new User({
             email: req.body.email,
-            password: req.body.password
+            password: req.body.password,
+            name: req.body.name
         });
-        await newUser.save();
-        res.status(201).json({ message: 'Usuário registrado com sucesso' })
+        const savedUser = await newUser.save();
+
+        const token = jwt.sign({ _id: savedUser._id, name: savedUser.name }, process.env.TOKEN_SECRET);
+
+        res.status(201).header('auth-token', token).json({ token: token, message: 'Usuário registrado e logado com sucesso', _id: savedUser._id, name: savedUser.name });
     } catch (error) {
-        res.status(500).json({ message: error.message })
+        res.status(500).json({ message: error.message });
     }
 }
 
 async function login(req, res) {
     try {
         const user = await User.findOne({ email: req.body.email });
-        if (!user) return res.status(400).json({ message: 'Email não encontrado.' });
+        if (!user) return res.status(400).json({ message: 'Email não encontrado' });
 
         const validPassword = await bcrypt.compare(req.body.password, user.password);
-        if (!validPassword) return res.status(400).json({ message: 'Senha inválida.' });
+        if (!validPassword) return res.status(400).json({ message: 'Senha inválida' });
 
         const token = jwt.sign({ _id: user._id, name: user.name }, process.env.TOKEN_SECRET);
         res.status(201);
@@ -38,10 +46,10 @@ async function deleteUser(req, res) {
         const user = await User.findByIdAndDelete(userId);
 
         if (!user) {
-            return res.status(404).json({ message: 'Usuário não encontrado.' });
+            return res.status(404).json({ message: 'Usuário não encontrado' });
         }
 
-        res.status(200).json({ message: 'Usuário deletado com sucesso.' });
+        res.status(200).json({ message: 'Usuário deletado com sucesso' });
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
