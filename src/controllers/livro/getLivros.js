@@ -2,22 +2,36 @@ const Livro = require('../../models/Livro');
 
 async function getLivros(req, res) {
     try {
-        let query = {};
+        let matchQuery = {};
 
         if (req.query.titulo) {
-            query.titulo = { $regex: new RegExp(req.query.titulo, 'i') };
+            matchQuery.titulo = { $regex: new RegExp(req.query.titulo, 'i') };
         }
         if (req.query.categoria) {
-            query.categoria = req.query.categoria;
+            matchQuery.categoria = req.query.categoria;
         }
         if (req.query.autor) {
-            query.autor = req.query.autor;
+            matchQuery.autor = req.query.autor;
         }
         if (req.query.destaque) {
-            query.destaque = req.query.destaque === 'true'
+            matchQuery.destaque = req.query.destaque === 'true';
         }
 
-        const livros = await Livro.find(query);
+        let pipeline = [
+            { $match: matchQuery }
+        ];
+
+        if (req.query.sort === 'true') {
+            
+            const size = req.query.q ? parseInt(req.query.q, 10) : 10; 
+            pipeline.push({ $sample: { size: size } });
+        } else if (req.query.q) {
+           
+            const limit = parseInt(req.query.q, 10);
+            pipeline.push({ $limit: limit });
+        }
+
+        const livros = await Livro.aggregate(pipeline);
         res.json(livros);
     } catch (error) {
         res.status(500).json({ message: error.message });
