@@ -12,11 +12,17 @@ async function updateLivro(req, res) {
     if (req.body.categoria != null) {
         res.livro.categoria = req.body.categoria;
     }
-    if (req.body.urlCapa != null) {
-        res.livro.urlCapa = req.body.urlCapa;
+    if (req.body.capa != null) {
+        res.livro.capa = req.body.capa;
     }
-    if (req.body.urlConteudo != null) {
-        res.livro.urlConteudo = req.body.urlConteudo;
+    if (req.body.txt != null) {
+        res.livro.txt = req.body.txt;
+    }
+    if (req.body.pdf != null) {
+        res.livro.pdf = req.body.pdf;
+    }
+    if (req.body.epub != null) {
+        res.livro.epub = req.body.epub;
     }
 
     try {

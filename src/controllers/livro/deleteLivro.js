@@ -1,4 +1,4 @@
-async function deleteLivro(req, res) {
+async function deleteLivro(res) {
     try {
         await res.livro.remove;
         res.json({message: 'Livro deletado'})

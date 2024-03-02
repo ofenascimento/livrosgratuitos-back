@@ -6,8 +6,10 @@ async function createLivro(req, res) {
         autor: req.body.autor,
         descricao: req.body.descricao,
         categoria: req.body.categoria,
-        urlCapa: req.body.urlCapa,
-        urlConteudo: req.body.urlConteudo,
+        capa: req.body.capa,
+        txt: req.body.txt,
+        pdf: req.body.pdf,
+        epub: req.body.epub,
         destaque: req.body.destaque
     })
 

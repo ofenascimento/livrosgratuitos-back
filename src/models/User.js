@@ -17,7 +17,11 @@ const userSchema = new mongoose.Schema({
     favoriteBooks: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Livro'
-    }]
+    }],
+    isAdmin: {
+        type: Boolean,
+        default: false
+    }
 })
 
 userSchema.pre('save', async function (next) {
