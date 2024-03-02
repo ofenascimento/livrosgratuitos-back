@@ -16,5 +16,5 @@ app.use('/users', UserRouter);
 
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
-    console.log(`Servidor iniciado na porta ${port}`);
+    console.log('\x1b[32m',`Servidor iniciado na porta ${port}`, '\x1b[0m');
 });

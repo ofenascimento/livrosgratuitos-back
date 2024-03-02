@@ -8,9 +8,8 @@ const connectDB = async () => {
         socketTimeoutMS: 45000, 
       };
     try {
-        const conn = await mongoose.connect(process.env.MONGO_URI, options)
-        console.log(`MongoDB Conectado: ${conn.connection.host}`);
-
+        await mongoose.connect(process.env.MONGO_URI, options)
+        console.log('\x1b[33m','MongoDB Conectado!', '\x1b[0m');
     } catch (error) {
         console.log(error)
         process.exit(1)
