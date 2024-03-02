@@ -14,6 +14,16 @@ const userSchema = new mongoose.Schema({
     name: {
         type: String,
     },
+    readingProgress: [{
+        bookId: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: 'Livro'
+        },
+        progress: {
+          type: Number,
+          required: true
+        }
+      }],      
     favoriteBooks: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Livro'

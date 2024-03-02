@@ -165,4 +165,56 @@ async function resetPassword (req, res) {
     res.json({message: 'Sua senha foi redefinida'});
 }
 
-module.exports = { register, login, addFavorite, removeFavorite, getFavoriteBooksById, deleteUser, recovePassword, resetPassword };
+async function saveProgressBook(req, res) {
+    const { bookId, progress } = req.body;
+    const { userId } = req.params;
+
+    try {
+        const user = await User.findById(userId);
+        if (!user) {
+            return res.status(404).json({ erro: "Usuário não encontrado" });
+        }
+
+        const index = user.readingProgress.findIndex(item => item.bookId.equals(bookId));
+
+        if (index > -1) {
+            user.readingProgress[index].progress = progress;
+        } else {
+            user.readingProgress.push({ bookId, progress });
+        }
+
+        await user.save();
+
+        res.status(200).json({ mensagem: "Progresso salvo com sucesso" });
+    } catch (error) {
+        res.status(500).json({ mensagem: "Erro ao salvar o progresso", erro: error.message });
+    }
+}
+
+async function getProgressBook(req, res) {
+    const { userId, bookId } = req.params;
+
+    try {
+        const user = await User.findById(userId);
+        if (!user) {
+            return res.status(404).json({ mensagem: "Usuário não encontrado" });
+        }
+
+        const progressItem = user.readingProgress.find(item => item.bookId.equals(bookId));
+
+        if (progressItem) {
+            const progressResponse = {
+                bookId: progressItem.bookId,
+                progress: progressItem.progress
+            };
+
+            res.status(200).json(progressResponse);
+        } else {
+            res.status(404).json({ mensagem: "Progresso de leitura não encontrado" });
+        }
+    } catch (error) {
+        res.status(500).json({ mensagem: "Erro ao recuperar o progresso", erro: error.message });
+    }
+}
+
+module.exports = { register, login, addFavorite, removeFavorite, getFavoriteBooksById, deleteUser, recovePassword, resetPassword, saveProgressBook, getProgressBook };
