@@ -17,8 +17,8 @@ async function register(req, res) {
 
         const token = jwt.sign({ _id: savedUser._id, name: savedUser.name }, process.env.TOKEN_SECRET);
 
-        res.status(201)
-        res.header('auth-token', token).json({ token: token })
+        res.status(201).header('Authorization', `Bearer ${token}`).json({ token: token });
+
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
@@ -33,8 +33,8 @@ async function login(req, res) {
         if (!validPassword) return res.status(400).json({ message: 'Senha inválida' });
 
         const token = jwt.sign({ _id: user._id, name: user.name, isAdmin: user.isAdmin }, process.env.TOKEN_SECRET);
-        res.status(201);
-        res.header('auth-token', token).json({ token: token })
+        res.status(201).header('Authorization', `Bearer ${token}`).json({ token: token });
+
     } catch (error) {
         res.status(500).json({ message: error.message })
     }
@@ -106,8 +106,8 @@ async function getFavoriteBooksById(req, res) {
                 autor: book.autor,
                 descricao: book.descricao,
                 categoria: book.categoria,
-                urlCapa: book.urlCapa,
-                urlConteudo: book.urlConteudo,
+                capa: book.capa,
+                txt: book.txt,
             };
         });
         res.json(favoriteBooks);
