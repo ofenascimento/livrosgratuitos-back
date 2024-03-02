@@ -21,6 +21,14 @@ const userSchema = new mongoose.Schema({
     isAdmin: {
         type: Boolean,
         default: false
+    },
+    resetPasswordToken: {
+        type: String,
+        required: false 
+    },
+    resetPasswordExpires: {
+        type: Date,
+        required: false
     }
 })
 

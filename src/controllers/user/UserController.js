@@ -117,4 +117,50 @@ async function getFavoriteBooksById(req, res) {
     }
 }
 
-module.exports = { register, login, addFavorite, removeFavorite, getFavoriteBooksById, deleteUser };
+async function recovePassword(req, res) {
+    const { email } = req.body;
+    const user = await User.findOne({ email });
+
+    if (!user) {
+        return res.status(404).send('Usuário não encontrado.');
+    }
+
+    const resetToken = crypto.randomBytes(20).toString('hex');
+    const resetTokenExpires = Date.now() + 600000; 
+
+    await User.updateOne({ email }, {
+        resetPasswordToken: resetToken,
+        resetPasswordExpires: resetTokenExpires,
+    });
+
+    const resetURL = `http://livrosgratuitos.com/reset-password/${resetToken}`;
+    await sendEmail(user.email, 'Recuperação de Senha', `Por favor, acesse este link para redefinir sua senha: ${resetURL}`);
+
+    res.status(200)
+    res.json({message: 'Instruções para redefinição de senha foram enviadas por e-mail.'});
+}
+
+async function resetPassword (req, res) {
+    const { token } = req.params;
+    const { password } = req.body;
+    const user = await User.findOne({
+        resetPasswordToken: token,
+        resetPasswordExpires: { $gt: Date.now() },
+    });
+
+    if (!user) {
+        return res.status(400).send('Token de redefinição de senha é inválido ou expirou.');
+    }
+
+    const hashedPassword = await bcrypt.hash(password, 12);
+    await User.updateOne({ _id: user._id }, {
+        password: hashedPassword,
+        resetPasswordToken: undefined,
+        resetPasswordExpires: undefined,
+    });
+
+    res.status(200)
+    res.json({message: 'Sua senha foi redefinida com sucesso.'});
+}
+
+module.exports = { register, login, addFavorite, removeFavorite, getFavoriteBooksById, deleteUser, recovePassword, resetPassword };
