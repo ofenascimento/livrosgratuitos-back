@@ -1,24 +1,24 @@
 const nodemailer = require('nodemailer');
+const emailTemplate = require('../utils/emailTemplate');
 
-async function sendEmail( to, subject, text ) {
+async function sendEmail(to, subject, token) {
     let transporter = nodemailer.createTransport({
         service: 'gmail',
         auth: {
-            user: process.env.EMAIL_USERNAME, 
+            user: process.env.EMAIL_USERNAME,
             pass: process.env.EMAIL_PASSWORD,
         },
     });
 
     let mailOptions = {
-        from: process.env.EMAIL_FROM, 
-        to: to, 
-        subject: subject, 
-        text: text, 
+        from: process.env.EMAIL_FROM,
+        to: to,
+        subject: subject,
+        html: emailTemplate(token)
     };
 
     try {
-        let info = await transporter.sendMail(mailOptions);
-        console.log('E-mail enviado: ' + info.response);
+        await transporter.sendMail(mailOptions);
     } catch (error) {
         console.log('Erro ao enviar e-mail:', error);
     }

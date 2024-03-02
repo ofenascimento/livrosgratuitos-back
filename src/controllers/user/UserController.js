@@ -1,6 +1,9 @@
 const User = require("../../models/User")
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken')
+const crypto = require('crypto'); 
+const sendEmail = require('../../utils/sendEmail');
+const generateToken = require('../../utils/generateToken')
 
 async function register(req, res) {
     try {
@@ -122,10 +125,10 @@ async function recovePassword(req, res) {
     const user = await User.findOne({ email });
 
     if (!user) {
-        return res.status(404).send('Usuário não encontrado.');
+        return res.status(404).json({message: 'Email não encontrado'});
     }
 
-    const resetToken = crypto.randomBytes(20).toString('hex');
+    const resetToken = generateToken(6);
     const resetTokenExpires = Date.now() + 600000; 
 
     await User.updateOne({ email }, {
@@ -133,8 +136,7 @@ async function recovePassword(req, res) {
         resetPasswordExpires: resetTokenExpires,
     });
 
-    const resetURL = `http://livrosgratuitos.com/reset-password/${resetToken}`;
-    await sendEmail(user.email, 'Recuperação de Senha', `Por favor, acesse este link para redefinir sua senha: ${resetURL}`);
+    await sendEmail(user.email, 'Recuperação de Senha', resetToken);
 
     res.status(200)
     res.json({message: 'Instruções para redefinição de senha foram enviadas por e-mail.'});
@@ -160,7 +162,7 @@ async function resetPassword (req, res) {
     });
 
     res.status(200)
-    res.json({message: 'Sua senha foi redefinida com sucesso.'});
+    res.json({message: 'Sua senha foi redefinida'});
 }
 
 module.exports = { register, login, addFavorite, removeFavorite, getFavoriteBooksById, deleteUser, recovePassword, resetPassword };
