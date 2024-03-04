@@ -15,6 +15,9 @@ router.delete('/delete-user/:userId', verifyToken, verifyUser, UserController.de
 router.post('/recover-password', UserController.recovePassword);
 router.post('/reset-password/:token', UserController.resetPassword);
 
+router.post('/:userId/reading-list', UserController.addBookToReadingList);
+router.get('/:userId/reading-list', UserController.getReadingList);
+
 router.post('/:userId/save-progress', UserController.saveProgressBook);
 router.get('/reading-progress/:userId/:bookId', UserController.getProgressBook);
 

@@ -59,6 +59,67 @@ async function deleteUser(req, res) {
     }
 }
 
+async function addBookToReadingList(req, res) {
+    const userId = req.params.userId;
+    const bookId = req.body.bookId;
+
+    try {
+        await User.findByIdAndUpdate(
+            userId,
+            { $addToSet: { readingList: bookId } },
+            { new: true }
+        );
+        res.status(200).json({ message: 'Livro adicionado a lista de leitura' });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+    ;
+}
+
+async function removeBookToReadingList(req, res) {
+    const userId = req.params.userId;
+    const bookId = req.params.bookId;
+
+    try {
+        await User.findByIdAndUpdate(
+            userId,
+            { $pull: { readingList: bookId } },
+            { new: true }
+        );
+        res.status(200).json({ message: 'Livro removido da lista de leitura' });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+}
+
+async function getReadingList(req, res) {
+    const userId = req.params.userId;
+
+    try {
+        const user = await User.findById(userId).populate('readingList');
+
+        if (!user) {
+            return res.status(404).json({ message: 'Usuário não encontrado' });
+        }
+
+        const readingList = user.readingList.map(book => {
+            return {
+                _id: book._id,
+                titulo: book.titulo,
+                autor: book.autor,
+                descricao: book.descricao,
+                categoria: book.categoria,
+                capa: book.capa,
+                txt: book.txt,
+            };
+        });
+        res.json(readingList);
+    } catch (error) {
+        console.error('Erro ao obter lista de leitura', error);
+        res.status(500).json({ message: 'Erro interno do servidor' });
+    }
+}
+
 async function addFavorite(req, res) {
     const userId = req.params.userId;
     const bookId = req.body.bookId;
@@ -217,4 +278,18 @@ async function getProgressBook(req, res) {
     }
 }
 
-module.exports = { register, login, addFavorite, removeFavorite, getFavoriteBooksById, deleteUser, recovePassword, resetPassword, saveProgressBook, getProgressBook };
+module.exports = { 
+    register, 
+    login, 
+    addFavorite, 
+    removeFavorite, 
+    getFavoriteBooksById, 
+    deleteUser, 
+    recovePassword, 
+    resetPassword, 
+    saveProgressBook, 
+    getProgressBook, 
+    removeBookToReadingList,
+    addBookToReadingList, 
+    getReadingList 
+};

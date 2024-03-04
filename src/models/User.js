@@ -28,6 +28,10 @@ const userSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Livro'
     }],
+    readingList: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Livro'
+    }],
     isAdmin: {
         type: Boolean,
         default: false
