@@ -22,6 +22,10 @@ const userSchema = new mongoose.Schema({
         progress: {
           type: Number,
           required: true
+        },
+        progressPercentage: 
+        {
+            type: Number
         }
       }],      
     favoriteBooks: [{

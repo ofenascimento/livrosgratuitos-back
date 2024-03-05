@@ -227,7 +227,7 @@ async function resetPassword (req, res) {
 }
 
 async function saveProgressBook(req, res) {
-    const { bookId, progress } = req.body;
+    const { bookId, progress, progressPercentage } = req.body;
     const { userId } = req.params;
 
     try {
@@ -240,8 +240,9 @@ async function saveProgressBook(req, res) {
 
         if (index > -1) {
             user.readingProgress[index].progress = progress;
+            user.readingProgress[index].progressPercentage = progressPercentage;
         } else {
-            user.readingProgress.push({ bookId, progress });
+            user.readingProgress.push({ bookId, progress, progressPercentage });
         }
 
         await user.save();
@@ -266,7 +267,8 @@ async function getProgressBook(req, res) {
         if (progressItem) {
             const progressResponse = {
                 bookId: progressItem.bookId,
-                progress: progressItem.progress
+                progress: progressItem.progress,
+                progressPercentage: progressItem.progressPercentage
             };
 
             res.status(200).json(progressResponse);
