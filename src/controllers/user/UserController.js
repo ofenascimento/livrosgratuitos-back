@@ -78,7 +78,7 @@ async function addBookToReadingList(req, res) {
 
 async function removeBookToReadingList(req, res) {
     const userId = req.params.userId;
-    const bookId = req.params.bookId;
+    const bookId = req.body.bookId;
 
     try {
         await User.findByIdAndUpdate(
@@ -86,6 +86,7 @@ async function removeBookToReadingList(req, res) {
             { $pull: { readingList: bookId } },
             { new: true }
         );
+        
         res.status(200).json({ message: 'Livro removido da lista de leitura' });
     } catch (error) {
         res.status(500).json({ message: error.message });

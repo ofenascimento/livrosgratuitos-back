@@ -15,11 +15,13 @@ router.delete('/delete-user/:userId', verifyToken, verifyUser, UserController.de
 router.post('/recover-password', UserController.recovePassword);
 router.post('/reset-password/:token', UserController.resetPassword);
 
-router.post('/:userId/reading-list', UserController.addBookToReadingList);
-router.get('/:userId/reading-list', UserController.getReadingList);
+router.post('/:userId/reading-list', verifyToken, verifyUser, UserController.addBookToReadingList);
+router.get('/:userId/reading-list', verifyToken, verifyUser, UserController.getReadingList);
+router.delete('/:userId/reading-list', verifyToken, verifyUser, UserController.removeBookToReadingList)
 
-router.post('/:userId/save-progress', UserController.saveProgressBook);
-router.get('/reading-progress/:userId/:bookId', UserController.getProgressBook);
+
+router.post('/:userId/save-progress', verifyToken, verifyUser, UserController.saveProgressBook);
+router.get('/reading-progress/:userId/:bookId', verifyToken, verifyUser, UserController.getProgressBook);
 
 router.put('/:userId/favorites', verifyToken, verifyUser, UserController.addFavorite);
 router.delete('/:userId/favorites/:bookId', verifyToken, verifyUser, UserController.removeFavorite);
