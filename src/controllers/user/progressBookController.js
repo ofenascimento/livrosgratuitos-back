@@ -89,35 +89,6 @@ async function saveProgressBook(req, res) {
     }
 }
 
-async function getProgressBook2(req, res, next) {
-    const { userId, bookId } = req.params;
-
-    try {
-        const user = await User.findById(userId).populate('readingList');;
-        if (!user) {
-            return res.status(404).json({ mensagem: "Usuário não encontrado" });
-        }
-
-        const progressItem = user.readingProgress.find(item => item.bookId.equals(bookId));
-
-        if (progressItem) {
-            const progressResponse = {
-                bookId: progressItem.bookId,
-                progress: progressItem.progress,
-                progressPercentage: progressItem.progressPercentage
-            };
-
-            res.progress = progressResponse;
-            next()
-
-        } else {
-            next()
-        }
-    } catch (error) {
-        res.status(500).json({ mensagem: "Erro ao recuperar o progresso", erro: error.message });
-    }
-}
-
 async function getProgressBook(req, res) {
     const { userId, bookId } = req.params;
 
@@ -145,4 +116,4 @@ async function getProgressBook(req, res) {
     }
 }
 
-module.exports = {addBookToReadingList, removeBookToReadingList, getReadingList, saveProgressBook, getProgressBook, getProgressBook2}
+module.exports = {addBookToReadingList, removeBookToReadingList, getReadingList, saveProgressBook, getProgressBook}

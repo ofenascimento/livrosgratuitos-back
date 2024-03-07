@@ -5,28 +5,47 @@ async function addFinishedBook(req, res) {
     const bookId = req.body.bookId;
 
     try {
-        await User.findByIdAndUpdate(
+        const user = await User.findByIdAndUpdate(
             userId,
-            { $addToSet: { finishedBooks: bookId } },
+            {
+                $addToSet: { finishedBooks: bookId },
+                $pull: { readingList: bookId }
+            },
             { new: true }
         );
+
+        const index = user.readingProgress.findIndex(item => item.bookId.equals(bookId));
+
+
+        user.readingProgress[index].progress = 0;
+        user.readingProgress[index].progressPercentage = 100;
+
+        await user.save();
+
         res.status(200).json({ message: 'Livro finalizado' });
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
-    ;
 }
+
 
 async function removeFinishedBook(req, res) {
     const userId = req.params.userId;
     const bookId = req.params.bookId;
 
     try {
-        await User.findByIdAndUpdate(
+        const user = await User.findByIdAndUpdate(
             userId,
             { $pull: { finishedBooks: bookId } },
             { new: true }
         );
+
+        const index = user.readingProgress.findIndex(item => item.bookId.equals(bookId));
+
+        user.readingProgress[index].progressPercentage = 0;
+
+        await user.save();
+
         res.status(200).json({ message: 'Livro removido dos finalizados' });
     } catch (error) {
         res.status(500).json({ message: error.message });
@@ -35,7 +54,7 @@ async function removeFinishedBook(req, res) {
 
 async function getFinishedBooks(req, res) {
     const userId = req.params.userId;
-    
+
     try {
         const user = await User.findById(userId).populate('finishedBooks');
 
