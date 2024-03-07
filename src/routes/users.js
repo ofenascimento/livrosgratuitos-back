@@ -3,8 +3,9 @@ const express = require('express');
 const router = express.Router();
 
 const userController = require("../controllers/user/userController");
-const favoriteBookController = require("../controllers/user/favoriteBookController")
-const progressBookController = require("../controllers/user/progressBookController")
+const favoriteBookController = require("../controllers/user/favoriteBookController");
+const progressBookController = require("../controllers/user/progressBookController");
+const finishedBookController = require("../controllers/user/finishedBookController");
 
 const verifyUser = require("../midllewares/verifyUser");
 const verifyToken = require('../midllewares/verifyToken');
@@ -18,11 +19,16 @@ router.post('/reset-password/:token', userController.resetPassword);
 router.post('/:userId/reading-list', verifyToken, verifyUser, progressBookController.addBookToReadingList);
 router.get('/:userId/reading-list', verifyToken, verifyUser, progressBookController.getReadingList);
 router.delete('/:userId/reading-list', verifyToken, verifyUser, progressBookController.removeBookToReadingList)
+
 router.post('/:userId/save-progress', verifyToken, verifyUser, progressBookController.saveProgressBook);
 router.get('/reading-progress/:userId/:bookId', verifyToken, verifyUser, progressBookController.getProgressBook);
 
 router.put('/:userId/favorites', verifyToken, verifyUser, favoriteBookController.addFavorite);
 router.delete('/:userId/favorites/:bookId', verifyToken, verifyUser, favoriteBookController.removeFavorite);
-router.get('/:userId/favorite-books', verifyToken, verifyUser, favoriteBookController.getFavoriteBooksById);
+router.get('/:userId/favorite-books', verifyToken, verifyUser, favoriteBookController.getFavoriteBooks);
+
+router.put('/:userId/finished', verifyToken, verifyUser, finishedBookController.addFinishedBook);
+router.delete('/:userId/finished/:bookId', verifyToken, verifyUser, finishedBookController.removeFinishedBook);
+router.get('/:userId/finished-books', verifyToken, verifyUser, finishedBookController.getFinishedBooks);
 
 module.exports = router;

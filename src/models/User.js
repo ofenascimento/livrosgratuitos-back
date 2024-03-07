@@ -36,6 +36,10 @@ const userSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Livro'
     }],
+    finishedBooks: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Livro'
+    }],
     isAdmin: {
         type: Boolean,
         default: false
