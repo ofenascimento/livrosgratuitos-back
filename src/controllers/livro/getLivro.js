@@ -13,10 +13,10 @@ async function getLivro(req, res) {
 
     const response = {
         ...livroData, 
-        ...res.progress,
         isFavorite,
         isFinished,
-        progressPercentage: progressItem?.progressPercentage
+        progressPercentage: progressItem?.progressPercentage,
+        progress: progressItem?.progress
     };
 
     res.json(response)
