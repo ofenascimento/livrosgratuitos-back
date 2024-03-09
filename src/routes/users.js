@@ -2,7 +2,7 @@ const express = require('express');
 
 const router = express.Router();
 
-const userController = require("../controllers/user/userController");
+const userController = require("../controllers/user/UserController");
 const favoriteBookController = require("../controllers/user/favoriteBookController");
 const progressBookController = require("../controllers/user/progressBookController");
 const finishedBookController = require("../controllers/user/finishedBookController");
@@ -15,6 +15,8 @@ router.post('/login', userController.login);
 router.delete('/delete-user/:userId', verifyToken, verifyUser, userController.deleteUser);
 router.post('/recover-password', userController.recovePassword);
 router.post('/reset-password/:token', userController.resetPassword);
+router.get('/:userId', verifyToken, verifyUser, userController.getUser)
+router.put('/:userId', verifyToken, verifyUser, userController.updateUser)
 
 router.post('/:userId/reading-list', verifyToken, verifyUser, progressBookController.addBookToReadingList);
 router.get('/:userId/reading-list', verifyToken, verifyUser, progressBookController.getReadingList);
