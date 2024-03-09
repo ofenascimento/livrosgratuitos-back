@@ -17,7 +17,9 @@ async function register(req, res) {
         });
         const savedUser = await newUser.save();
 
-        const token = jwt.sign({ _id: savedUser._id, name: savedUser.name }, process.env.TOKEN_SECRET);
+        const firstname = savedUser.name.split(' ')[0]
+
+        const token = jwt.sign({ _id: savedUser._id, name: firstname }, process.env.TOKEN_SECRET);
 
         res.status(201).header('Authorization', `Bearer ${token}`).json({ token: token });
 
@@ -34,7 +36,9 @@ async function login(req, res) {
         const validPassword = await bcrypt.compare(req.body.password, user.password);
         if (!validPassword) return res.status(400).json({ message: 'Senha inválida' });
 
-        const token = jwt.sign({ _id: user._id, name: user.name, isAdmin: user.isAdmin }, process.env.TOKEN_SECRET);
+        const firstname = user.name.split(' ')[0]
+
+        const token = jwt.sign({ _id: user._id, name: firstname, isAdmin: user.isAdmin }, process.env.TOKEN_SECRET);
         res.status(201).header('Authorization', `Bearer ${token}`).json({ token: token });
 
     } catch (error) {
