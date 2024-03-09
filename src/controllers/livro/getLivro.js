@@ -16,9 +16,7 @@ async function getLivro(req, res) {
         ...res.progress,
         isFavorite,
         isFinished,
-        progress: progressItem.progress,
-        progressPercentage: progressItem.progressPercentage
-
+        progressPercentage: progressItem?.progressPercentage
     };
 
     res.json(response)
