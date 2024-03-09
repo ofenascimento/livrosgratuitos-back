@@ -137,6 +137,7 @@ async function updateUser(req, res) {
 
     try {
        user.save()
+       res.status(200).json({message: 'Usuário atualizado'})
     } catch (error) {
         res.status(400).json({message: error})
     }
