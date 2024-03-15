@@ -10,7 +10,7 @@ const livroSchema = new mongoose.Schema({
     required: true
   },
   descricao: String,
-  categoria: String,
+  categoria: [String],
   capa: String,
   txt: String,
   pdf: String,

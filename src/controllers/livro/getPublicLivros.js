@@ -8,7 +8,7 @@ async function getPublicLivros(req, res) {
             matchQuery.titulo = { $regex: new RegExp(req.query.titulo, 'i') };
         }
         if (req.query.categoria) {
-            matchQuery.categoria = req.query.categoria;
+            matchQuery.categoria = { $in: req.query.categoria.split(",") };
         }
         if (req.query.autor) {
             matchQuery.autor = req.query.autor;
