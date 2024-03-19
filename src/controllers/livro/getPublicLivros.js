@@ -18,15 +18,14 @@ async function getPublicLivros(req, res) {
         }
 
         let pipeline = [
-            { $match: matchQuery }
+            { $match: matchQuery },
+            { $project: { titulo: 1, autor: 1, descricao: 1, categoria: 1, capa: 1 } }
         ];
 
-        if (req.query.sort === 'true') {
-            
+        if (req.query.sort === 'true') {            
             const size = req.query.q ? parseInt(req.query.q, 10) : 10; 
             pipeline.push({ $sample: { size: size } });
-        } else if (req.query.q) {
-           
+        } else if (req.query.q) {           
             const limit = parseInt(req.query.q, 10);
             pipeline.push({ $limit: limit });
         }
