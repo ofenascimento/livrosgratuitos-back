@@ -16,9 +16,11 @@ async function addFinishedBook(req, res) {
 
         const index = user.readingProgress.findIndex(item => item.bookId.equals(bookId));
 
+        if (user.readingProgress[index]) {
+            user.readingProgress[index].progress = 0;
+            user.readingProgress[index].progressPercentage = 100;
+        }
 
-        user.readingProgress[index].progress = 0;
-        user.readingProgress[index].progressPercentage = 100;
 
         await user.save();
 
