@@ -44,7 +44,9 @@ async function removeFinishedBook(req, res) {
 
         const index = user.readingProgress.findIndex(item => item.bookId.equals(bookId));
 
-        user.readingProgress[index].progressPercentage = 0;
+        if (user.readingProgress[index]) {
+            user.readingProgress[index].progressPercentage = 0;
+        }
 
         await user.save();
 
