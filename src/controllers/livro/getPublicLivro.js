@@ -5,7 +5,8 @@ async function getPublicLivro(req, res) {
         autor: res.livro.autor,
         descricao: res.livro.descricao,
         categoria: res.livro.categoria,
-        capa: res.livro.capa
+        capa: res.livro.capa,
+        txt: res.livro.txt
     }
 
     res.json(response);

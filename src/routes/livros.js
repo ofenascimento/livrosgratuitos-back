@@ -18,7 +18,7 @@ router.get('/public', getPublicLivros)
 router.get('/public/:bookId/', getLivroByID, getPublicLivro)
 
 router.get('/', verifyToken, getLivros);
-router.get('/:bookId/:userId', getLivroByID, getLivro);
+router.get('/:bookId/:userId', verifyToken, getLivroByID, getLivro);
 
 router.post('/', verifyAdmin, createLivro);
 router.put('/:id', verifyAdmin, getLivroByID, updateLivro);
