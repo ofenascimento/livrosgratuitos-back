@@ -67,7 +67,7 @@ async function getReadingList(req, res) {
 }
 
 async function saveProgressBook(req, res) {
-  const { bookId, progress, progressPercentage } = req.body;
+  const { bookId, progress, progressPercentage, currentParagraph } = req.body;
   const { userId } = req.params;
 
   try {
@@ -83,8 +83,9 @@ async function saveProgressBook(req, res) {
     if (index > -1) {
       user.readingProgress[index].progress = progress;
       user.readingProgress[index].progressPercentage = progressPercentage;
+      user.readingProgress[index].currentParagraph = currentParagraph;
     } else {
-      user.readingProgress.push({ bookId, progress, progressPercentage });
+      user.readingProgress.push({ bookId, progress, progressPercentage, currentParagraph });
     }
 
     await user.save();

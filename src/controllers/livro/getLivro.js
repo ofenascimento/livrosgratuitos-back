@@ -1,7 +1,6 @@
 const User = require("../../models/User")
 
 async function getLivro(req, res) {
-
     const userId = req.params.userId;
     const user = await User.findById(userId).populate('readingList');
 
@@ -16,7 +15,8 @@ async function getLivro(req, res) {
         isFavorite,
         isFinished,
         progressPercentage: progressItem?.progressPercentage,
-        progress: progressItem?.progress
+        progress: progressItem?.progress,
+        currentParagraph: progressItem?.currentParagraph
     };
 
     res.json(response)
