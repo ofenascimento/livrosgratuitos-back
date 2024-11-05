@@ -67,7 +67,9 @@ async function getReadingList(req, res) {
 }
 
 async function saveProgressBook(req, res) {
+  
   const { bookId, progress, progressPercentage, currentParagraph } = req.body;
+  console.log({ bookId, progress, progressPercentage, currentParagraph })
   const { userId } = req.params;
 
   try {
