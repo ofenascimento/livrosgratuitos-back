@@ -13,8 +13,10 @@ const getPublicLivro = require("../controllers/livro/getPublicLivro")
 const updateLivro = require("../controllers/livro/updateLivro")
 const createLivro = require("../controllers/livro/createLivro")
 const deleteLivro = require("../controllers/livro/deleteLivro");
+const getLivrosComPdf = require('../controllers/livro/getPDFs');
 
 router.get('/public', getPublicLivros)
+router.get('/public/pdfs', getLivrosComPdf)
 router.get('/public/:bookId/', getLivroByID, getPublicLivro)
 
 router.get('/', verifyToken, getLivros);
