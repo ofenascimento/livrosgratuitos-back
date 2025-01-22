@@ -55,8 +55,8 @@ async function getReadingList(req, res) {
         categoria: book.categoria,
         capa: book.capa,
         txt: book.txt,
-        progress: book.progress,
-        progressPercentage: progressItem.progressPercentage,
+        progress: book.progress ?? 0,
+        progressPercentage: progressItem?.progressPercentage ?? 0,
       };
     });
     res.json(readingList);
