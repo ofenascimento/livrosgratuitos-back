@@ -19,7 +19,7 @@ router.get('/:userId', verifyToken, verifyUser, userController.getUser)
 router.put('/:userId', verifyToken, verifyUser, userController.updateUser)
 
 router.post('/:userId/reading-list', verifyToken, verifyUser, progressBookController.addBookToReadingList);
-router.get('/:userId/reading-list', progressBookController.getReadingList);
+router.get('/:userId/reading-list', verifyToken, verifyUser, progressBookController.getReadingList);
 router.delete('/:userId/reading-list', verifyToken, verifyUser, progressBookController.removeBookToReadingList)
 
 router.post('/:userId/save-progress', verifyToken, verifyUser, progressBookController.saveProgressBook);
