@@ -1,4 +1,4 @@
-const mongoose = require("mongoose")
+const mongoose = require("mongoose");
 
 const livroSchema = new mongoose.Schema({
   titulo: {
@@ -15,12 +15,18 @@ const livroSchema = new mongoose.Schema({
   txt: String,
   pdf: String,
   epub: String,
+  urlHtml: String,
+  slug: {
+    type: String,
+    required: true,
+    unique: true
+  },
   destaque: {
     type: Boolean,
     default: false
   }
-})
+});
 
-const Livro = mongoose.model('Livro', livroSchema)
+const Livro = mongoose.model('Livro', livroSchema);
 
-module.exports = Livro
+module.exports = Livro;

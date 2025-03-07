@@ -19,7 +19,17 @@ async function getPublicLivros(req, res) {
 
         let pipeline = [
             { $match: matchQuery },
-            { $project: { titulo: 1, autor: 1, descricao: 1, categoria: 1, capa: 1 } }
+            { 
+                $project: { 
+                    titulo: 1, 
+                    autor: 1, 
+                    descricao: 1, 
+                    categoria: 1, 
+                    capa: 1,
+                    urlHtml: { $ifNull: ["$urlHtml", null] },
+                    slug: { $ifNull: ["$slug", null] }
+                } 
+            }
         ];
 
         if (req.query.sort === 'true') {            

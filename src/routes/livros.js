@@ -1,29 +1,33 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const getLivroByID = require("../midllewares/getLivroByID")
-const verifyToken = require("../midllewares/verifyToken")
-const verifyAdmin = require("../midllewares/verifyAdmin")
+const getLivroByID = require("../midllewares/getLivroByID");
+const verifyToken = require("../midllewares/verifyToken");
+const verifyAdmin = require("../midllewares/verifyAdmin");
 
-const getLivros = require("../controllers/livro/getLivros")
-const getLivro = require("../controllers/livro/getLivro")
+const getLivros = require("../controllers/livro/getLivros");
+const getLivro = require("../controllers/livro/getLivro");
 
-const getPublicLivros = require("../controllers/livro/getPublicLivros")
-const getPublicLivro = require("../controllers/livro/getPublicLivro")
+const getPublicLivros = require("../controllers/livro/getPublicLivros");
+const getPublicLivro = require("../controllers/livro/getPublicLivro");
 
-const updateLivro = require("../controllers/livro/updateLivro")
-const createLivro = require("../controllers/livro/createLivro")
+const updateLivro = require("../controllers/livro/updateLivro");
+const createLivro = require("../controllers/livro/createLivro");
 const deleteLivro = require("../controllers/livro/deleteLivro");
-const getLivrosComPdf = require('../controllers/livro/getPDFs');
+const getLivrosComPdf = require("../controllers/livro/getPDFs");
+const getBySlug = require("../midllewares/getBySlug");
 
-router.get('/public', getPublicLivros)
-router.get('/public/pdfs', getLivrosComPdf)
-router.get('/public/:bookId/', getLivroByID, getPublicLivro)
+router.get("/public", getPublicLivros);
+router.get("/public/pdfs", getLivrosComPdf);
+router.get("/public/:bookId/", getLivroByID, getPublicLivro);
 
-router.get('/', verifyToken, getLivros);
-router.get('/:bookId/:userId', verifyToken, getLivroByID, getLivro);
+router.get("/public/content/:slug/", getBySlug, getPublicLivro);
+router.get("/content/:slug/:userId", verifyToken, getBySlug, getLivro);
 
-router.post('/', verifyAdmin, createLivro);
-router.put('/:id', verifyAdmin, getLivroByID, updateLivro);
-router.delete('/:id', verifyAdmin, getLivroByID, deleteLivro)
+router.get("/", verifyToken, getLivros);
+router.get("/:bookId/:userId", verifyToken, getLivroByID, getLivro);
 
-module.exports = router
+router.post("/", verifyAdmin, createLivro);
+router.put("/:id", verifyAdmin, getLivroByID, updateLivro);
+router.delete("/:id", verifyAdmin, getLivroByID, deleteLivro);
+
+module.exports = router;
