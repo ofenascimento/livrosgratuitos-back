@@ -16,7 +16,8 @@ async function createLivro(req, res) {
             epub: req.body.epub,
             urlHtml: req.body.urlHtml,
             slug: slug,
-            destaque: req.body.destaque
+            destaque: req.body.destaque,
+            epubInfo: req.body.epubInfo
         });
 
         const novoLivro = await livro.save();

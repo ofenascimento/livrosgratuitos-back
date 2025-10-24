@@ -25,11 +25,12 @@ const livroSchema = new mongoose.Schema({
     type: Boolean,
     default: false
   },
-  epub: {
-    autor: String,
-    autorLink: String,
+  epubInfo: {
+    font: String,
+    fontLink: String,
     license: String,
     licenseLink: String,
+    modified: String
   }
 });
 

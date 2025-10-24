@@ -9,6 +9,7 @@ async function getPublicLivro(req, res) {
         pdf: res.livro.pdf,
         epub: res.livro.epub,
         _id: res.livro.id,
+        epubInfo: res.livro.epubInfo,
     };
 
     if (res.livro.urlHtml) {
