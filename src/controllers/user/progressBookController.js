@@ -67,9 +67,8 @@ async function getReadingList(req, res) {
 }
 
 async function saveProgressBook(req, res) {
-  
   const { bookId, progress, progressPercentage, currentParagraph } = req.body;
-  console.log({ bookId, progress, progressPercentage, currentParagraph })
+  console.log({ bookId, progress, progressPercentage, currentParagraph });
   const { userId } = req.params;
 
   try {
@@ -87,7 +86,12 @@ async function saveProgressBook(req, res) {
       user.readingProgress[index].progressPercentage = progressPercentage;
       user.readingProgress[index].currentParagraph = currentParagraph;
     } else {
-      user.readingProgress.push({ bookId, progress, progressPercentage, currentParagraph });
+      user.readingProgress.push({
+        bookId,
+        progress,
+        progressPercentage,
+        currentParagraph,
+      });
     }
 
     await user.save();
@@ -131,10 +135,97 @@ async function getProgressBook(req, res) {
   }
 }
 
+async function saveEpubProgress(req, res) {
+  try {
+    const { userId,  } = req.params;
+    const { progress, cfi, bookId } = req.body;
+
+    if (!userId)
+      return res.status(401).json({ ok: false, error: "Unauthenticated" });
+    if (!bookId || typeof progress !== "number") {
+      return res
+        .status(400)
+        .json({ ok: false, error: "bookId e progress são obrigatórios" });
+    }
+
+    const clamped = Math.max(0, Math.min(100, progress));
+
+    const updateExisting = await User.updateOne(
+      { _id: userId, "readingProgressEpub.bookId": bookId },
+      {
+        $set: {
+          "readingProgressEpub.$.progress": clamped,
+          ...(typeof cfi === "string"
+            ? { "readingProgressEpub.$.cfi": cfi }
+            : {}),
+        },
+      }
+    );
+
+    if (updateExisting.matchedCount === 0) {
+      await User.updateOne(
+        { _id: userId },
+        {
+          $push: {
+            readingProgressEpub: {
+              bookId,
+              progress: clamped,
+              ...(typeof cfi === "string" ? { cfi } : {}),
+            },
+          },
+        }
+      );
+    }
+
+    const user = await User.findById(userId, "readingProgressEpub");
+    const entry = user.readingProgressEpub.find(
+      (e) => String(e.bookId) === String(bookId)
+    );
+
+    return res.json({ ok: true, data: entry });
+  } catch (err) {
+    console.error("saveEpubProgress error:", err);
+    return res.status(500).json({ ok: false, error: "Erro interno" });
+  }
+}
+
+async function getEpubProgress(req, res) {
+  try {
+    const { userId, bookId } = req.params;
+
+    if (!userId)
+      return res.status(400).json({ ok: false, error: "userId é obrigatório" });
+    if (!bookId)
+      return res.status(400).json({ ok: false, error: "bookId é obrigatório" });
+
+    const user = await User.findById(userId, "readingProgressEpub");
+    if (!user)
+      return res
+        .status(404)
+        .json({ ok: false, error: "Usuário não encontrado" });
+
+    const entry = user.readingProgressEpub.find(
+      (e) => e.bookId.toString() === bookId
+    );
+    console.log(entry);
+    if (!entry)
+      return res
+        .status(404)
+        .json({ ok: false, error: "Progresso não encontrado" });
+
+    return res.json({ ok: true, data: entry });
+  } catch (err) {
+    console.error("getEpubProgress error:", err);
+    return res.status(500).json({ ok: false, error: "Erro interno" });
+  }
+}
+
 module.exports = {
   addBookToReadingList,
   removeBookToReadingList,
   getReadingList,
   saveProgressBook,
   getProgressBook,
+  saveEpubProgress,
+  getEpubProgress,
 };

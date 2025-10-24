@@ -24,6 +24,12 @@ const livroSchema = new mongoose.Schema({
   destaque: {
     type: Boolean,
     default: false
+  },
+  epub: {
+    autor: String,
+    autorLink: String,
+    license: String,
+    licenseLink: String,
   }
 });
 
