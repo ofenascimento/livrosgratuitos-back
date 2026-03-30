@@ -26,7 +26,7 @@ router.get("/content/:slug/:userId", verifyToken, getBySlug, getLivro);
 router.get("/", verifyToken, getLivros);
 router.get("/:bookId/:userId", verifyToken, getLivroByID, getLivro);
 
-router.post("/", createLivro);
+router.post("/", verifyAdmin, createLivro);
 router.put("/:id", verifyAdmin, getLivroByID, updateLivro);
 router.delete("/:id", verifyAdmin, getLivroByID, deleteLivro);
 
