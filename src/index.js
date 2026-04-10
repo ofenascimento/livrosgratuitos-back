@@ -6,6 +6,7 @@ const cors = require('cors');
 const LivrosRouter = require('./routes/livros');
 const UserRouter = require('./routes/users');
 const sendSupportEmail = require('./utils/sendSupportEmail');
+const readingProgressRoutes = require("./routes/readingProgress");
 
 const app = express();
 connectDB();
@@ -14,6 +15,7 @@ app.use(express.json());
 
 app.use('/livros', LivrosRouter);
 app.use('/users', UserRouter);
+app.use("/reading-progress", readingProgressRoutes);
 
 app.get('/', (req, res) => {
     res.json({message: 'Oi leitor'})

@@ -30,7 +30,8 @@ const livroSchema = new mongoose.Schema({
     fontLink: String,
     license: String,
     licenseLink: String,
-    modified: String
+    modified: String,
+    translatedByAI: Boolean
   }
 });
 

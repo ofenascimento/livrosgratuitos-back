@@ -1,7 +1,6 @@
 const Livro = require('../models/Livro');
 
 async function getBySlug(req, res, next) {
-    console.log('chegou')
     try {
         const livro = await Livro.findOne({ slug: req.params.slug });
 

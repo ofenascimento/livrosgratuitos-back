@@ -68,7 +68,6 @@ async function getReadingList(req, res) {
 
 async function saveProgressBook(req, res) {
   const { bookId, progress, progressPercentage, currentParagraph } = req.body;
-  console.log({ bookId, progress, progressPercentage, currentParagraph });
   const { userId } = req.params;
 
   try {
@@ -207,7 +206,6 @@ async function getEpubProgress(req, res) {
     const entry = user.readingProgressEpub.find(
       (e) => e.bookId.toString() === bookId
     );
-    console.log(entry);
     if (!entry)
       return res
         .status(404)
