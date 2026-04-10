@@ -1,4 +1,5 @@
 const User = require("../../models/User");
+const ReadingProgress = require("../../models/ReadingProgress");
 
 async function getLivro(req, res) {
   try {
@@ -10,10 +11,15 @@ async function getLivro(req, res) {
     }
 
     const livroId = res.livro._id;
-    
+
     const progressItem = user.readingProgress.find((item) =>
       item.bookId.equals(livroId)
     );
+
+    const epubProgress = await ReadingProgress.findOne({
+      userId: req.user.id,
+      livroId: livroId,
+    });
 
     const livroData = res.livro.toObject ? res.livro.toObject() : res.livro;
     const isFavorite = user.favoriteBooks.includes(livroId);
@@ -26,6 +32,7 @@ async function getLivro(req, res) {
       progressPercentage: progressItem?.progressPercentage,
       progress: progressItem?.progress,
       currentParagraph: progressItem?.currentParagraph,
+      epubProgress,
     };
 
     res.json(response);
