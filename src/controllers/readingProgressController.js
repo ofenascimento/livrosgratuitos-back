@@ -1,4 +1,5 @@
 const ReadingProgress = require("../models/ReadingProgress");
+const User = require("../models/User");
 
 exports.saveProgress = async (req, res) => {
   try {
@@ -38,5 +39,32 @@ exports.getProgress = async (req, res) => {
   } catch (error) {
     res.status(500).json({ message: "Erro ao buscar progresso" });
     console.log('errou')
+  }
+};
+
+exports.getEpubReadingList = async (req, res) => {
+  try {
+    const progressList = await ReadingProgress.find({
+      userId: req.user.id,
+      progressPercentage: { $gt: 0 },
+    }).populate("livroId");
+
+    const epubsEmProgresso = progressList
+      .filter((p) => p.livroId)
+      .map((p) => ({
+        _id: p.livroId._id,
+        titulo: p.livroId.titulo,
+        autor: p.livroId.autor,
+        capa: p.livroId.capa,
+        slug: p.livroId.slug,
+        progressPercentage: p.progressPercentage,
+        currentCfi: p.currentCfi,
+        currentHref: p.currentHref,
+      }));
+
+    res.json(epubsEmProgresso);
+  } catch (error) {
+    console.error("Erro interno do servidor:", error);
+    res.status(500).json({ message: "Erro interno do servidor" });
   }
 };

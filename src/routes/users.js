@@ -93,18 +93,4 @@ router.get(
   finishedBookController.getFinishedBooks
 );
 
-router.post(
-  "/:userId/epub-progress",
-  verifyToken,
-  verifyUser,
-  progressBookController.saveEpubProgress
-);
-
-router.get(
-  "/:userId/epub-progress/:bookId",
-  verifyToken,
-  verifyUser,
-  progressBookController.getEpubProgress
-);
-
 module.exports = router;
