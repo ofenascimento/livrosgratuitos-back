@@ -52,6 +52,7 @@ async function getFavoriteBooks(req, res) {
                 categoria: book.categoria,
                 capa: book.capa,
                 txt: book.txt,
+                slug: book.slug
             };
         });
         res.json(favoriteBooks);
