@@ -1,4 +1,4 @@
-const User = require("../../models/User")
+const User = require("../../../models/User")
 
 async function addFinishedBook(req, res) {
     const userId = req.params.userId;

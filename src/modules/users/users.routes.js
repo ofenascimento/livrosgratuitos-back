@@ -1,32 +1,43 @@
 const express = require("express");
-
 const router = express.Router();
 
-const userController = require("../modules/user/controllers/UserController");
-const favoriteBookController = require("../modules/user/controllers/favoriteBookController");
-const progressBookController = require("../modules/user/controllers/progressBookController");
-const finishedBookController = require("../modules/user/controllers/finishedBookController");
+const userController = require("./controllers/UserController");
+const favoriteBookController = require("./controllers/favoriteBookController");
+const progressBookController = require("./controllers/progressBookController");
+const finishedBookController = require("./controllers/finishedBookController");
 
-const verifyUser = require("../modules/user/middlewares/verifyUser");
-const verifyToken = require("../middlewares/verifyToken");
+const verifyUser = require("./middlewares/verifyUser");
+const verifyToken = require("../../middlewares/verifyToken");
+const validate = require("../../middlewares/validate");
 
-router.post("/register", userController.register);
-router.post("/login", userController.login);
+const {
+  registerSchema,
+  loginSchema,
+  recoverPasswordSchema,
+  resetPasswordSchema,
+  updateUserSchema,
+  bookIdSchema,
+  saveProgressSchema,
+} = require("./users.validation");
+
+router.post("/register", validate(registerSchema), userController.register);
+router.post("/login", validate(loginSchema), userController.login);
 router.delete(
   "/delete-user/:userId",
   verifyToken,
   verifyUser,
   userController.deleteUser
 );
-router.post("/recover-password", userController.recovePassword);
-router.post("/reset-password/:token", userController.resetPassword);
+router.post("/recover-password", validate(recoverPasswordSchema), userController.recovePassword);
+router.post("/reset-password/:token", validate(resetPasswordSchema), userController.resetPassword);
 router.get("/:userId", verifyToken, verifyUser, userController.getUser);
-router.put("/:userId", verifyToken, verifyUser, userController.updateUser);
+router.put("/:userId", verifyToken, verifyUser, validate(updateUserSchema), userController.updateUser);
 
 router.post(
   "/:userId/reading-list",
   verifyToken,
   verifyUser,
+  validate(bookIdSchema),
   progressBookController.addBookToReadingList
 );
 router.get(
@@ -46,6 +57,7 @@ router.post(
   "/:userId/save-progress",
   verifyToken,
   verifyUser,
+  validate(saveProgressSchema),
   progressBookController.saveProgressBook
 );
 router.get(
@@ -59,6 +71,7 @@ router.put(
   "/:userId/favorites",
   verifyToken,
   verifyUser,
+  validate(bookIdSchema),
   favoriteBookController.addFavorite
 );
 router.delete(
@@ -78,6 +91,7 @@ router.put(
   "/:userId/finished",
   verifyToken,
   verifyUser,
+  validate(bookIdSchema),
   finishedBookController.addFinishedBook
 );
 router.delete(

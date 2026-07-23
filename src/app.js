@@ -2,7 +2,7 @@ const express = require("express");
 const cors = require('cors');
 
 const LivrosRouter = require('./modules/books/books.routes');
-const UserRouter = require('./routes/users');
+const UserRouter = require('./modules/users/users.routes');
 const readingProgressRoutes = require("./routes/readingProgress");
 const sendSupportEmail = require('./utils/sendSupportEmail');
 
