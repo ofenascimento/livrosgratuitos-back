@@ -1,5 +1,5 @@
-const User = require("../../models/User");
-const ReadingProgress = require("../../models/ReadingProgress");
+const User = require("../../../models/User");
+const ReadingProgress = require("../../../models/ReadingProgress");
 
 async function getLivro(req, res) {
   try {

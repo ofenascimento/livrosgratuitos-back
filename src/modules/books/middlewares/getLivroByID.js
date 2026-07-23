@@ -1,4 +1,4 @@
-const Livro = require('../models/Livro');
+const Livro = require('../../../models/Livro');
 
 async function getLivroByID(req, res, next) {
     let livro;

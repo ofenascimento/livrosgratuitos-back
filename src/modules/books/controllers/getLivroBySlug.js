@@ -1,5 +1,5 @@
-const User = require("../../models/User");
-const Livro = require("../../models/Livro");
+const User = require("../../../models/User");
+const Livro = require("../../../models/Livro");
 
 async function getLivroBySlug(req, res) {
     try {

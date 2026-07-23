@@ -1,4 +1,4 @@
-const Livro = require('../../models/Livro');
+const Livro = require('../../../models/Livro');
 const slugify = require('slugify');
 
 async function createLivro(req, res) {
