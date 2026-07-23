@@ -1,10 +1,10 @@
 const express = require("express");
 const router = express.Router();
 
-const userController = require("./controllers/UserController");
-const favoriteBookController = require("./controllers/favoriteBookController");
-const progressBookController = require("./controllers/progressBookController");
-const finishedBookController = require("./controllers/finishedBookController");
+const userController = require("./controllers/users.controller");
+const favoriteBookController = require("./controllers/favoriteBooks.controller");
+const progressBookController = require("./controllers/progressBooks.controller");
+const finishedBookController = require("./controllers/finishedBooks.controller");
 
 const verifyUser = require("./middlewares/verifyUser");
 const verifyToken = require("../../middlewares/verifyToken");

@@ -1,5 +1,5 @@
 const ReadingProgress = require('../../../models/ReadingProgress');
-const catchAsync = require('../../../middlewares/catchAsync');
+const catchAsync = require('../../../utils/catchAsync');
 
 exports.saveProgress = catchAsync(async (req, res) => {
   const { livroId, progressPercentage, currentCfi, currentHref } = req.body;
