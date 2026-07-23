@@ -7,8 +7,8 @@ const favoriteBookController = require("../controllers/user/favoriteBookControll
 const progressBookController = require("../controllers/user/progressBookController");
 const finishedBookController = require("../controllers/user/finishedBookController");
 
-const verifyUser = require("../midllewares/verifyUser");
-const verifyToken = require("../midllewares/verifyToken");
+const verifyUser = require("../middlewares/verifyUser");
+const verifyToken = require("../middlewares/verifyToken");
 
 router.post("/register", userController.register);
 router.post("/login", userController.login);

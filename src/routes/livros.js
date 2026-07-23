@@ -1,8 +1,8 @@
 const express = require("express");
 const router = express.Router();
-const getLivroByID = require("../midllewares/getLivroByID");
-const verifyToken = require("../midllewares/verifyToken");
-const verifyAdmin = require("../midllewares/verifyAdmin");
+const getLivroByID = require("../middlewares/getLivroByID");
+const verifyToken = require("../middlewares/verifyToken");
+const verifyAdmin = require("../middlewares/verifyAdmin");
 
 const getLivros = require("../controllers/livro/getLivros");
 const getLivro = require("../controllers/livro/getLivro");
@@ -14,7 +14,7 @@ const updateLivro = require("../controllers/livro/updateLivro");
 const createLivro = require("../controllers/livro/createLivro");
 const deleteLivro = require("../controllers/livro/deleteLivro");
 const getLivrosComPdf = require("../controllers/livro/getPDFs");
-const getBySlug = require("../midllewares/getBySlug");
+const getBySlug = require("../middlewares/getBySlug");
 
 router.get("/public", getPublicLivros);
 router.get("/public/pdfs", getLivrosComPdf);
