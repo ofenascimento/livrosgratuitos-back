@@ -7,8 +7,9 @@ const progressBookController = require("../controllers/progressBooks.controller"
 const finishedBookController = require("../controllers/finishedBooks.controller");
 
 const verifyUser = require("../middlewares/verifyUser");
-const verifyToken = require("../../../middlewares/verifyToken");
+const verifyToken = require("../../../middlewares/verifyAdmin");
 const validate = require("../../../middlewares/validate");
+const { authLimiter } = require("../../../middlewares/rateLimiter");
 
 const {
   registerSchema,
@@ -20,16 +21,16 @@ const {
   saveProgressSchema,
 } = require("../validations/users.validation");
 
-router.post("/register", validate(registerSchema), userController.register);
-router.post("/login", validate(loginSchema), userController.login);
+router.post("/register", authLimiter, validate(registerSchema), userController.register);
+router.post("/login", authLimiter, validate(loginSchema), userController.login);
 router.delete(
   "/delete-user/:userId",
   verifyToken,
   verifyUser,
   userController.deleteUser
 );
-router.post("/recover-password", validate(recoverPasswordSchema), userController.recovePassword);
-router.post("/reset-password/:token", validate(resetPasswordSchema), userController.resetPassword);
+router.post("/recover-password", authLimiter, validate(recoverPasswordSchema), userController.recovePassword);
+router.post("/reset-password/:token", authLimiter, validate(resetPasswordSchema), userController.resetPassword);
 router.get("/:userId", verifyToken, verifyUser, userController.getUser);
 router.put("/:userId", verifyToken, verifyUser, validate(updateUserSchema), userController.updateUser);
 
