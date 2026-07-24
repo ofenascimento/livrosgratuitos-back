@@ -17,7 +17,11 @@ exports.register = async (body) => {
   });
 
   const firstname = savedUser.name ? savedUser.name.split(' ')[0] : undefined;
-  const token = jwt.sign({ _id: savedUser._id, name: firstname }, process.env.TOKEN_SECRET);
+  const token = jwt.sign(
+    { _id: savedUser._id, name: firstname },
+    process.env.TOKEN_SECRET,
+    { expiresIn: '7d' }
+  );
 
   return token;
 };
@@ -32,7 +36,8 @@ exports.login = async (body) => {
   const firstname = user.name ? user.name.split(' ')[0] : undefined;
   const token = jwt.sign(
     { _id: user._id, name: firstname, isAdmin: user.isAdmin },
-    process.env.TOKEN_SECRET
+    process.env.TOKEN_SECRET,
+    { expiresIn: '7d' }
   );
 
   return token;
