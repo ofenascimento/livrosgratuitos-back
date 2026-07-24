@@ -1,12 +1,14 @@
+const ForbiddenError = require('../../../utils/errors/ForbiddenError');
+
 function verifyUser(req, res, next) {
-    const user = req.user;
-    const userId = req.params.userId;
+  const { user } = req;
+  const { userId } = req.params;
 
-    if (user._id !== userId) {
-        return res.status(403).send('Acesso negado.');
-    }
+  if (String(user._id) !== String(userId)) {
+    return next(new ForbiddenError('Acesso negado.'));
+  }
 
-    next();
+  next();
 }
 
 module.exports = verifyUser;
