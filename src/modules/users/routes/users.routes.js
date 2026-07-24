@@ -1,14 +1,14 @@
 const express = require("express");
 const router = express.Router();
 
-const userController = require("./controllers/users.controller");
-const favoriteBookController = require("./controllers/favoriteBooks.controller");
-const progressBookController = require("./controllers/progressBooks.controller");
-const finishedBookController = require("./controllers/finishedBooks.controller");
+const userController = require("../controllers/users.controller");
+const favoriteBookController = require("../controllers/favoriteBooks.controller");
+const progressBookController = require("../controllers/progressBooks.controller");
+const finishedBookController = require("../controllers/finishedBooks.controller");
 
-const verifyUser = require("./middlewares/verifyUser");
-const verifyToken = require("../../middlewares/verifyToken");
-const validate = require("../../middlewares/validate");
+const verifyUser = require("../middlewares/verifyUser");
+const verifyToken = require("../../../middlewares/verifyToken");
+const validate = require("../../../middlewares/validate");
 
 const {
   registerSchema,
@@ -18,7 +18,7 @@ const {
   updateUserSchema,
   bookIdSchema,
   saveProgressSchema,
-} = require("./users.validation");
+} = require("../validations/users.validation");
 
 router.post("/register", validate(registerSchema), userController.register);
 router.post("/login", validate(loginSchema), userController.login);
