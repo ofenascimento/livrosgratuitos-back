@@ -1,15 +1,15 @@
 const express = require("express");
 const router = express.Router();
 
-const getLivroByID = require("./middlewares/getLivroByID");
-const getBySlug = require("./middlewares/getBySlug");
-const verifyToken = require("../../middlewares/verifyToken");
-const verifyAdmin = require("../../middlewares/verifyAdmin");
-const validate = require("../../middlewares/validate");
+const getLivroByID = require("../middlewares/getLivroByID");
+const getBySlug = require("../middlewares/getBySlug");
+const verifyToken = require("../../../middlewares/verifyToken");
+const verifyAdmin = require("../../../middlewares/verifyAdmin");
+const validate = require("../../../middlewares/validate");
 
-const booksController = require("./controllers/books.controller");
+const booksController = require("../controllers/books.controller");
 
-const { createLivroSchema, updateLivroSchema } = require("./books.validation");
+const { createLivroSchema, updateLivroSchema } = require("../validations/books.validation");
 
 router.get("/public", booksController.getPublicLivros);
 router.get("/public/pdfs", booksController.getLivrosComPdf);
