@@ -3,11 +3,11 @@ const router = express.Router();
 
 const userController = require("../controllers/users.controller");
 const favoriteBookController = require("../controllers/favoriteBooks.controller");
-const progressBookController = require("../controllers/progressBooks.controller");
+const readingListController = require("../controllers/readingList.controller");
 const finishedBookController = require("../controllers/finishedBooks.controller");
 
 const verifyUser = require("../middlewares/verifyUser");
-const verifyToken = require("../../../middlewares/verifyToken"); // CORRIGIDO
+const verifyToken = require("../../../middlewares/verifyToken");
 const validate = require("../../../middlewares/validate");
 const { authLimiter } = require("../../../middlewares/rateLimiter");
 
@@ -18,7 +18,6 @@ const {
   resetPasswordSchema,
   updateUserSchema,
   bookIdSchema,
-  saveProgressSchema,
 } = require("../validations/users.validation");
 
 router.post("/register", authLimiter, validate(registerSchema), userController.register);
@@ -39,33 +38,19 @@ router.post(
   verifyToken,
   verifyUser,
   validate(bookIdSchema),
-  progressBookController.addBookToReadingList
+  readingListController.addBookToReadingList
 );
 router.get(
   "/:userId/reading-list",
   verifyToken,
   verifyUser,
-  progressBookController.getReadingList
+  readingListController.getReadingList
 );
 router.delete(
   "/:userId/reading-list",
   verifyToken,
   verifyUser,
-  progressBookController.removeBookToReadingList
-);
-
-router.post(
-  "/:userId/save-progress",
-  verifyToken,
-  verifyUser,
-  validate(saveProgressSchema),
-  progressBookController.saveProgressBook
-);
-router.get(
-  "/reading-progress/:userId/:bookId",
-  verifyToken,
-  verifyUser,
-  progressBookController.getProgressBook
+  readingListController.removeBookToReadingList
 );
 
 router.put(

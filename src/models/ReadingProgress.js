@@ -36,10 +36,6 @@ const readingProgressSchema = new mongoose.Schema(
       type: String,
       default: "",
     },
-    updatedAt: {
-      type: Date,
-      default: Date.now,
-    },
   },
   { timestamps: true }
 );

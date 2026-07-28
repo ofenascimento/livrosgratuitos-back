@@ -8,7 +8,3 @@ exports.removeFromReadingList = (userId, bookId) =>
 
 exports.findByIdWithReadingList = (userId) =>
   User.findById(userId).populate('readingList');
-
-exports.findById = (userId) => User.findById(userId);
-
-exports.save = (userDoc) => userDoc.save();
