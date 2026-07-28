@@ -7,7 +7,7 @@ const progressBookController = require("../controllers/progressBooks.controller"
 const finishedBookController = require("../controllers/finishedBooks.controller");
 
 const verifyUser = require("../middlewares/verifyUser");
-const verifyToken = require("../../../middlewares/verifyAdmin");
+const verifyToken = require("../../../middlewares/verifyToken"); // CORRIGIDO
 const validate = require("../../../middlewares/validate");
 const { authLimiter } = require("../../../middlewares/rateLimiter");
 
