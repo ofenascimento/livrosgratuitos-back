@@ -1,6 +1,5 @@
 const progressBooksRepository = require('../repositories/progressBooks.repository');
 const NotFoundError = require('../../../utils/errors/NotFoundError');
-const AppError = require('../../../utils/AppError');
 
 exports.addBookToReadingList = (userId, bookId) =>
   progressBooksRepository.addToReadingList(userId, bookId);
@@ -59,35 +58,4 @@ exports.getProgressBook = async (userId, bookId) => {
     progress: progressItem.progress,
     progressPercentage: progressItem.progressPercentage,
   };
-};
-
-exports.saveEpubProgress = async (userId, body) => {
-  const { progress, cfi, bookId } = body;
-
-  if (!bookId || typeof progress !== 'number') {
-    throw new AppError('bookId e progress são obrigatórios', 400);
-  }
-
-  const clamped = Math.max(0, Math.min(100, progress));
-
-  const updateExisting = await progressBooksRepository.updateEpubProgress(userId, bookId, clamped, cfi);
-
-  if (updateExisting.matchedCount === 0) {
-    await progressBooksRepository.pushEpubProgress(userId, bookId, clamped, cfi);
-  }
-
-  const user = await progressBooksRepository.findByIdSelectEpubProgress(userId);
-  if (!user) throw new NotFoundError('Usuário não encontrado');
-
-  return user.readingProgressEpub.find((e) => String(e.bookId) === String(bookId));
-};
-
-exports.getEpubProgress = async (userId, bookId) => {
-  const user = await progressBooksRepository.findByIdSelectEpubProgress(userId);
-  if (!user) throw new NotFoundError('Usuário não encontrado');
-
-  const entry = user.readingProgressEpub.find((e) => e.bookId.toString() === bookId);
-  if (!entry) throw new NotFoundError('Progresso não encontrado');
-
-  return entry;
 };

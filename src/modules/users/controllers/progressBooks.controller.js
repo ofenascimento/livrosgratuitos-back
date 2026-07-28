@@ -25,13 +25,3 @@ exports.getProgressBook = catchAsync(async (req, res) => {
   const progress = await progressBooksService.getProgressBook(req.params.userId, req.params.bookId);
   res.status(200).json(progress);
 });
-
-exports.saveEpubProgress = catchAsync(async (req, res) => {
-  const entry = await progressBooksService.saveEpubProgress(req.params.userId, req.body);
-  res.json({ ok: true, data: entry });
-});
-
-exports.getEpubProgress = catchAsync(async (req, res) => {
-  const entry = await progressBooksService.getEpubProgress(req.params.userId, req.params.bookId);
-  res.json({ ok: true, data: entry });
-});
