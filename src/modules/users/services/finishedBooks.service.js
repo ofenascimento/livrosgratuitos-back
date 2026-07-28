@@ -4,26 +4,11 @@ const NotFoundError = require('../../../utils/errors/NotFoundError');
 exports.addFinishedBook = async (userId, bookId) => {
   const user = await finishedBooksRepository.addFinishedBook(userId, bookId);
   if (!user) throw new NotFoundError('Usuário não encontrado');
-
-  const index = user.readingProgress.findIndex((item) => item.bookId.equals(bookId));
-  if (index > -1) {
-    user.readingProgress[index].progress = 0;
-    user.readingProgress[index].progressPercentage = 100;
-  }
-
-  await finishedBooksRepository.save(user);
 };
 
 exports.removeFinishedBook = async (userId, bookId) => {
   const user = await finishedBooksRepository.removeFinishedBook(userId, bookId);
   if (!user) throw new NotFoundError('Usuário não encontrado');
-
-  const index = user.readingProgress.findIndex((item) => item.bookId.equals(bookId));
-  if (index > -1) {
-    user.readingProgress[index].progressPercentage = 0;
-  }
-
-  await finishedBooksRepository.save(user);
 };
 
 exports.getFinishedBooks = async (userId) => {

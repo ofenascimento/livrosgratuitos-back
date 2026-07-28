@@ -108,7 +108,6 @@ exports.getLivro = async (livroDoc, userId, authenticatedUserId) => {
   if (!user) throw new NotFoundError('Usuário não encontrado.');
 
   const livroId = livroDoc._id;
-  const progressItem = user.readingProgress.find((item) => item.bookId.equals(livroId));
 
   const epubProgress = await ReadingProgress.findOne({
     userId: authenticatedUserId,
@@ -123,9 +122,6 @@ exports.getLivro = async (livroDoc, userId, authenticatedUserId) => {
     ...livroData,
     isFavorite,
     isFinished,
-    progressPercentage: progressItem?.progressPercentage,
-    progress: progressItem?.progress,
-    currentParagraph: progressItem?.currentParagraph,
     epubProgress,
   };
 };
@@ -137,7 +133,6 @@ exports.getBookBySlug = async (slug, userId) => {
   const user = await User.findById(userId).populate('readingList');
   if (!user) throw new NotFoundError('Usuário não encontrado');
 
-  const progressItem = user.readingProgress.find((item) => item.bookId.equals(livro._id));
   const isFavorite = user.favoriteBooks.includes(livro._id);
   const isFinished = user.finishedBooks.includes(livro._id);
 
@@ -145,8 +140,5 @@ exports.getBookBySlug = async (slug, userId) => {
     ...livro.toObject(),
     isFavorite,
     isFinished,
-    progressPercentage: progressItem?.progressPercentage,
-    progress: progressItem?.progress,
-    currentParagraph: progressItem?.currentParagraph,
   };
 };

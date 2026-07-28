@@ -29,13 +29,6 @@ const bookIdSchema = z.object({
   bookId: z.string().min(1, 'bookId is required'),
 });
 
-const saveProgressSchema = z.object({
-  bookId: z.string().min(1, 'bookId is required'),
-  progress: z.number(),
-  progressPercentage: z.number().optional(),
-  currentParagraph: z.number().optional(),
-  cfi: z.string().optional(), 
-});
 
 module.exports = {
   registerSchema,
@@ -44,5 +37,4 @@ module.exports = {
   resetPasswordSchema,
   updateUserSchema,
   bookIdSchema,
-  saveProgressSchema,
 };
