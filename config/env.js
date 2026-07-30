@@ -1,4 +1,5 @@
 const { z } = require('zod');
+const logger = require('../src/utils/logger');
 
 const envSchema = z.object({
   MONGO_URI: z.string().min(1, 'MONGO_URI é obrigatório'),
@@ -15,9 +16,9 @@ const envSchema = z.object({
 const result = envSchema.safeParse(process.env);
 
 if (!result.success) {
-  console.error('\x1b[31m%s\x1b[0m', 'Erro nas variáveis de ambiente:');
+  logger.error('Erro nas variáveis de ambiente:');
   result.error.issues.forEach((issue) => {
-    console.error(`  - ${issue.path.join('.')}: ${issue.message}`);
+    logger.error(`  - ${issue.path.join('.')}: ${issue.message}`);
   });
   process.exit(1);
 }

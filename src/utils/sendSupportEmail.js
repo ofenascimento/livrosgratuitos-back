@@ -1,19 +1,20 @@
 const nodemailer = require('nodemailer');
+const logger = require('../utils/logger');
 
 async function sendSupportEmail(userEmail, userName, subject, message) {
-    let transporter = nodemailer.createTransport({
-        service: 'gmail',
-        auth: {
-            user: process.env.EMAIL_USERNAME,
-            pass: process.env.EMAIL_PASSWORD,
-        },
-    });
+  let transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+      user: process.env.EMAIL_USERNAME,
+      pass: process.env.EMAIL_PASSWORD,
+    },
+  });
 
-    let mailOptions = {
-        from: process.env.EMAIL_FROM,
-        to: process.env.EMAIL_SUPPORT,
-        subject: `Suporte LV: ${subject}`,
-        html: `
+  let mailOptions = {
+    from: process.env.EMAIL_FROM,
+    to: process.env.EMAIL_SUPPORT,
+    subject: `Suporte LV: ${subject}`,
+    html: `
         <table width="100%" bgcolor="#F1F5F8" border="0" cellpadding="0" cellspacing="0">
     <tr>
         <td>
@@ -31,14 +32,14 @@ async function sendSupportEmail(userEmail, userName, subject, message) {
     </tr>
 </table>
         `,
-    };
+  };
 
-    try {
-        await transporter.sendMail(mailOptions);
-        console.log('E-mail de suporte enviado com sucesso!');
-    } catch (error) {
-        console.log('Erro ao enviar e-mail de suporte:', error);
-    }
+  try {
+    await transporter.sendMail(mailOptions);
+    logger.info({ userEmail }, 'E-mail de suporte enviado com sucesso');
+  } catch (error) {
+    logger.error({ err: error, userEmail }, 'Erro ao enviar e-mail de suporte');
+  }
 }
 
 module.exports = sendSupportEmail;

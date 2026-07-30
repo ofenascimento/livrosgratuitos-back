@@ -1,8 +1,10 @@
+const logger = require('../utils/logger');
+
 const errorHandler = (err, req, res, next) => {
   if (err.name === 'ValidationError') {
     return res.status(400).json({
       error: 'Erro de validação',
-      details: Object.values(err.errors).map(e => e.message),
+      details: Object.values(err.errors).map((e) => e.message),
     });
   }
 
@@ -19,7 +21,15 @@ const errorHandler = (err, req, res, next) => {
   const message = err.isOperational ? err.message : 'Erro interno no servidor';
 
   if (!err.isOperational) {
-    console.error('ERRO NÃO TRATADO:', err);
+    logger.error(
+      {
+        err,
+        method: req.method,
+        url: req.originalUrl,
+        userId: req.user?._id,
+      },
+      'Erro não tratado'
+    );
   }
 
   res.status(statusCode).json({ error: message });
