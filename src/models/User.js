@@ -14,39 +14,6 @@ const userSchema = new mongoose.Schema({
   name: {
     type: String,
   },
-  readingProgress: [
-    {
-      bookId: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Livro",
-      },
-      progress: {
-        type: Number,
-        required: true,
-      },
-      progressPercentage: {
-        type: Number,
-      },
-      currentParagraph: {
-        type: Number,
-      },
-    },
-  ],
-  readingProgressEpub: [
-    {
-      bookId: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Livro",
-      },
-      progress: {
-        type: Number,
-        required: true,
-      },
-      cfi: {
-        type: String,
-      },
-    },
-  ],
   favoriteBooks: [
     {
       type: mongoose.Schema.Types.ObjectId,
