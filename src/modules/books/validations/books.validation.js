@@ -19,7 +19,6 @@ const createLivroSchema = z.object({
   pdf: z.string().optional(),
   epub: z.string().optional(),
   urlHtml: z.string().optional(),
-  slug: z.string().min(1, 'slug is required'),
   destaque: z.boolean().optional(),
   epubInfo: epubInfoSchema,
 });

@@ -22,7 +22,7 @@ router.get("/", verifyToken, booksController.getLivros);
 router.get("/:bookId/:userId", verifyToken, getLivroByID, booksController.getLivro);
 
 router.post("/", verifyAdmin, validate(createLivroSchema), booksController.createLivro);
-router.put("/:id", verifyAdmin, validate(updateLivroSchema), getLivroByID, booksController.updateLivro);
-router.delete("/:id", verifyAdmin, getLivroByID, booksController.deleteLivro);
+router.put("/:bookId", verifyAdmin, validate(updateLivroSchema), getLivroByID, booksController.updateLivro);
+router.delete("/:bookId", verifyAdmin, getLivroByID, booksController.deleteLivro);
 
 module.exports = router;
