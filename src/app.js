@@ -13,6 +13,7 @@ const errorHandler = require('./middlewares/errorHandler');
 const corsOptions = {
   origin: process.env.FRONTEND_URL || 'https://livrosgratuitos.com',
   credentials: true,
+  exposedHeaders: ['Authorization'],
 };
 
 const app = express();
