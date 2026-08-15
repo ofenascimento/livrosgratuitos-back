@@ -136,9 +136,15 @@ exports.getBookBySlug = async (slug, userId) => {
   const isFavorite = user.favoriteBooks.includes(book._id);
   const isFinished = user.finishedBooks.includes(book._id);
 
+  const epubProgress = await ReadingProgress.findOne({
+    userId: user._id,
+    bookId: book._id,
+  });
+
   return {
     ...book.toObject(),
     isFavorite,
     isFinished,
+    epubProgress
   };
 };
