@@ -9,20 +9,20 @@ const epubInfoSchema = z.object({
   translatedByAI: z.boolean().optional(),
 }).optional();
 
-const createLivroSchema = z.object({
-  titulo: z.string().min(1, 'titulo is required'),
-  autor: z.string().min(1, 'autor is required'),
-  descricao: z.string().optional(),
-  categoria: z.array(z.string()).optional(),
-  capa: z.string().optional(),
+const createBookSchema = z.object({
+  title: z.string().min(1, 'title is required'),
+  author: z.string().min(1, 'author is required'),
+  description: z.string().optional(),
+  categories: z.array(z.string()).optional(),
+  cover: z.string().optional(),
   txt: z.string().optional(),
   pdf: z.string().optional(),
   epub: z.string().optional(),
-  urlHtml: z.string().optional(),
-  destaque: z.boolean().optional(),
+  htmlUrl: z.string().optional(),
+  featured: z.boolean().optional(),
   epubInfo: epubInfoSchema,
 });
 
-const updateLivroSchema = createLivroSchema.partial();
+const updateBookSchema = createBookSchema.partial();
 
-module.exports = { createLivroSchema, updateLivroSchema };
+module.exports = { createBookSchema, updateBookSchema };

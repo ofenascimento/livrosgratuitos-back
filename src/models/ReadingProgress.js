@@ -8,9 +8,9 @@ const readingProgressSchema = new mongoose.Schema(
       required: true,
       index: true,
     },
-    livroId: {
+    bookId: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Livro",
+      ref: "Book",
       required: true,
       index: true,
     },
@@ -40,6 +40,6 @@ const readingProgressSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-readingProgressSchema.index({ userId: 1, livroId: 1 }, { unique: true });
+readingProgressSchema.index({ userId: 1, bookId: 1 }, { unique: true });
 
 module.exports = mongoose.model("ReadingProgress", readingProgressSchema);

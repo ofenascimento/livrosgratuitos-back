@@ -13,7 +13,7 @@ const {
 const { saveProgressSchema } = require("../validations/reading-progress.validation");
 
 router.post("/", verifyToken, validate(saveProgressSchema), saveProgress);
-router.get("/:livroId", verifyToken, getProgress);
+router.get("/:bookId", verifyToken, getProgress);
 
 router.get(
   "/:userId/epub-reading-list",

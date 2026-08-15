@@ -6,10 +6,10 @@ const NotFoundError = require('../../../utils/errors/NotFoundError');
 
 function buildMatchQuery(query) {
   const matchQuery = {};
-  if (query.titulo) matchQuery.titulo = { $regex: new RegExp(query.titulo, 'i') };
-  if (query.categoria) matchQuery.categoria = { $in: query.categoria.split(',') };
-  if (query.autor) matchQuery.autor = query.autor;
-  if (query.destaque) matchQuery.destaque = query.destaque === 'true';
+  if (query.title) matchQuery.title = { $regex: new RegExp(query.title, 'i') };
+  if (query.categories) matchQuery.categories = { $in: query.categories.split(',') };
+  if (query.author) matchQuery.author = query.author;
+  if (query.featured) matchQuery.featured = query.featured === 'true';
   return matchQuery;
 }
 
@@ -23,56 +23,56 @@ function applySortOrLimit(pipeline, query) {
   }
 }
 
-exports.createLivro = (body) => {
-  const slug = slugify(body.titulo, { lower: true, strict: true });
+exports.createBook = (body) => {
+  const slug = slugify(body.title, { lower: true, strict: true });
 
   return booksRepository.create({
-    titulo: body.titulo,
-    autor: body.autor,
-    descricao: body.descricao,
-    categoria: body.categoria,
-    capa: body.capa,
+    title: body.title,
+    author: body.author,
+    description: body.description,
+    categories: body.categories,
+    cover: body.cover,
     txt: body.txt,
     pdf: body.pdf,
     epub: body.epub,
-    urlHtml: body.urlHtml,
+    htmlUrl: body.htmlUrl,
     slug,
-    destaque: body.destaque,
+    featured: body.featured,
     epubInfo: body.epubInfo,
   });
 };
 
-exports.updateLivro = (livroDoc, body) => {
-  const fields = ['titulo', 'autor', 'descricao', 'categoria', 'capa', 'txt', 'pdf', 'epub'];
+exports.updateBook = (bookDoc, body) => {
+  const fields = ['title', 'author', 'description', 'categories', 'cover', 'txt', 'pdf', 'epub'];
 
   fields.forEach((field) => {
     if (body[field] != null) {
-      livroDoc[field] = body[field];
+      bookDoc[field] = body[field];
     }
   });
 
-  return booksRepository.save(livroDoc);
+  return booksRepository.save(bookDoc);
 };
 
-exports.deleteLivro = (livroDoc) => booksRepository.deleteOne(livroDoc);
+exports.deleteBook = (bookDoc) => booksRepository.deleteOne(bookDoc);
 
-exports.getLivros = (query) => {
+exports.getBooks = (query) => {
   const pipeline = [{ $match: buildMatchQuery(query) }];
   applySortOrLimit(pipeline, query);
   return booksRepository.aggregate(pipeline);
 };
 
-exports.getPublicLivros = (query) => {
+exports.getPublicBooks = (query) => {
   const pipeline = [
     { $match: buildMatchQuery(query) },
     {
       $project: {
-        titulo: 1,
-        autor: 1,
-        descricao: 1,
-        categoria: 1,
-        capa: 1,
-        urlHtml: { $ifNull: ['$urlHtml', null] },
+        title: 1,
+        author: 1,
+        description: 1,
+        categories: 1,
+        cover: 1,
+        htmlUrl: { $ifNull: ['$htmlUrl', null] },
         slug: { $ifNull: ['$slug', null] },
       },
     },
@@ -81,45 +81,45 @@ exports.getPublicLivros = (query) => {
   return booksRepository.aggregate(pipeline);
 };
 
-exports.getLivrosComPdf = () => booksRepository.findWithPdf();
+exports.getBooksWithPdf = () => booksRepository.findWithPdf();
 
-exports.getPublicLivro = (livroDoc) => {
+exports.getPublicBook = (bookDoc) => {
   const response = {
-    titulo: livroDoc.titulo,
-    autor: livroDoc.autor,
-    descricao: livroDoc.descricao,
-    categoria: livroDoc.categoria,
-    capa: livroDoc.capa,
-    txt: livroDoc.txt,
-    pdf: livroDoc.pdf,
-    epub: livroDoc.epub,
-    _id: livroDoc.id,
-    epubInfo: livroDoc.epubInfo,
+    title: bookDoc.title,
+    author: bookDoc.author,
+    description: bookDoc.description,
+    categories: bookDoc.categories,
+    cover: bookDoc.cover,
+    txt: bookDoc.txt,
+    pdf: bookDoc.pdf,
+    epub: bookDoc.epub,
+    _id: bookDoc.id,
+    epubInfo: bookDoc.epubInfo,
   };
 
-  if (livroDoc.urlHtml) response.urlHtml = livroDoc.urlHtml;
-  if (livroDoc.slug) response.slug = livroDoc.slug;
+  if (bookDoc.htmlUrl) response.htmlUrl = bookDoc.htmlUrl;
+  if (bookDoc.slug) response.slug = bookDoc.slug;
 
   return response;
 };
 
-exports.getLivro = async (livroDoc, userId, authenticatedUserId) => {
+exports.getBook = async (bookDoc, userId, authenticatedUserId) => {
   const user = await User.findById(userId).populate('readingList');
   if (!user) throw new NotFoundError('Usuário não encontrado.');
 
-  const livroId = livroDoc._id;
+  const bookId = bookDoc._id;
 
   const epubProgress = await ReadingProgress.findOne({
     userId: authenticatedUserId,
-    livroId,
+    bookId,
   });
 
-  const livroData = livroDoc.toObject ? livroDoc.toObject() : livroDoc;
-  const isFavorite = user.favoriteBooks.includes(livroId);
-  const isFinished = user.finishedBooks.includes(livroId);
+  const bookData = bookDoc.toObject ? bookDoc.toObject() : bookDoc;
+  const isFavorite = user.favoriteBooks.includes(bookId);
+  const isFinished = user.finishedBooks.includes(bookId);
 
   return {
-    ...livroData,
+    ...bookData,
     isFavorite,
     isFinished,
     epubProgress,
@@ -127,17 +127,17 @@ exports.getLivro = async (livroDoc, userId, authenticatedUserId) => {
 };
 
 exports.getBookBySlug = async (slug, userId) => {
-  const livro = await booksRepository.findBySlug(slug);
-  if (!livro) throw new NotFoundError('Livro não encontrado');
+  const book = await booksRepository.findBySlug(slug);
+  if (!book) throw new NotFoundError('Livro não encontrado');
 
   const user = await User.findById(userId).populate('readingList');
   if (!user) throw new NotFoundError('Usuário não encontrado');
 
-  const isFavorite = user.favoriteBooks.includes(livro._id);
-  const isFinished = user.finishedBooks.includes(livro._id);
+  const isFavorite = user.favoriteBooks.includes(book._id);
+  const isFinished = user.finishedBooks.includes(book._id);
 
   return {
-    ...livro.toObject(),
+    ...book.toObject(),
     isFavorite,
     isFinished,
   };

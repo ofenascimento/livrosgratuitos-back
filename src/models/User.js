@@ -17,19 +17,19 @@ const userSchema = new mongoose.Schema({
   favoriteBooks: [
     {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Livro",
+      ref: "Book",
     },
   ],
   readingList: [
     {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Livro",
+      ref: "Book",
     },
   ],
   finishedBooks: [
     {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Livro",
+      ref: "Book",
     },
   ],
   isAdmin: {

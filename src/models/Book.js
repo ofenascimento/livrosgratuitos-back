@@ -1,27 +1,27 @@
 const mongoose = require("mongoose");
 
-const livroSchema = new mongoose.Schema({
-  titulo: {
+const bookSchema = new mongoose.Schema({
+  title: {
     type: String,
     required: true
   },
-  autor: {
+  author: {
     type: String,
     required: true
   },
-  descricao: String,
-  categoria: [String],
-  capa: String,
+  description: String,
+  categories: [String],
+  cover: String,
   txt: String,
   pdf: String,
   epub: String,
-  urlHtml: String,
+  htmlUrl: String,
   slug: {
     type: String,
     required: true,
     unique: true
   },
-  destaque: {
+  featured: {
     type: Boolean,
     default: false
   },
@@ -35,6 +35,6 @@ const livroSchema = new mongoose.Schema({
   }
 });
 
-const Livro = mongoose.model('Livro', livroSchema);
+const Book = mongoose.model('Book', bookSchema, 'books');
 
-module.exports = Livro;
+module.exports = Book;

@@ -2,7 +2,7 @@ const request = require('supertest');
 const jwt = require('jsonwebtoken');
 const app = require('../src/app');
 const User = require('../src/models/User');
-const Livro = require('../src/models/Livro');
+const Book = require('../src/models/Book');
 
 describe('Users', () => {
   describe('POST /users/register', () => {
@@ -115,41 +115,41 @@ describe('Users', () => {
   describe('Favoritos', () => {
     let user;
     let token;
-    let livro;
+    let book;
 
     beforeEach(async () => {
       user = await User.create({ email: 'leitor@teste.com', password: '123456' });
       token = jwt.sign({ _id: user._id.toString() }, process.env.TOKEN_SECRET);
-      livro = await Livro.create({ titulo: 'Livro Teste', autor: 'Autor', slug: 'livro-teste' });
+      book = await Book.create({ title: 'Livro Teste', author: 'Autor', slug: 'livro-teste' });
     });
 
     test('adiciona livro aos favoritos', async () => {
       const res = await request(app)
         .put(`/users/${user._id}/favorites`)
         .set('Authorization', `Bearer ${token}`)
-        .send({ bookId: livro._id });
+        .send({ bookId: book._id });
 
       expect(res.status).toBe(200);
 
       const updated = await User.findById(user._id);
-      expect(updated.favoriteBooks.map(String)).toContain(livro._id.toString());
+      expect(updated.favoriteBooks.map(String)).toContain(book._id.toString());
     });
 
     test('remove livro dos favoritos', async () => {
-      await User.findByIdAndUpdate(user._id, { $addToSet: { favoriteBooks: livro._id } });
+      await User.findByIdAndUpdate(user._id, { $addToSet: { favoriteBooks: book._id } });
 
       const res = await request(app)
-        .delete(`/users/${user._id}/favorites/${livro._id}`)
+        .delete(`/users/${user._id}/favorites/${book._id}`)
         .set('Authorization', `Bearer ${token}`);
 
       expect(res.status).toBe(200);
 
       const updated = await User.findById(user._id);
-      expect(updated.favoriteBooks.map(String)).not.toContain(livro._id.toString());
+      expect(updated.favoriteBooks.map(String)).not.toContain(book._id.toString());
     });
 
     test('lista livros favoritos', async () => {
-      await User.findByIdAndUpdate(user._id, { $addToSet: { favoriteBooks: livro._id } });
+      await User.findByIdAndUpdate(user._id, { $addToSet: { favoriteBooks: book._id } });
 
       const res = await request(app)
         .get(`/users/${user._id}/favorite-books`)
@@ -157,32 +157,32 @@ describe('Users', () => {
 
       expect(res.status).toBe(200);
       expect(res.body.length).toBe(1);
-      expect(res.body[0].titulo).toBe('Livro Teste');
+      expect(res.body[0].title).toBe('Livro Teste');
     });
   });
 
   describe('Reading List', () => {
     let user;
     let token;
-    let livro;
+    let book;
 
     beforeEach(async () => {
       user = await User.create({ email: 'leitor2@teste.com', password: '123456' });
       token = jwt.sign({ _id: user._id.toString() }, process.env.TOKEN_SECRET);
-      livro = await Livro.create({ titulo: 'Outro Livro', autor: 'Autor', slug: 'outro-livro' });
+      book = await Book.create({ title: 'Outro Livro', author: 'Autor', slug: 'outro-livro' });
     });
 
     test('adiciona livro à lista de leitura', async () => {
       const res = await request(app)
         .post(`/users/${user._id}/reading-list`)
         .set('Authorization', `Bearer ${token}`)
-        .send({ bookId: livro._id });
+        .send({ bookId: book._id });
 
       expect(res.status).toBe(200);
     });
 
     test('lista a reading list corretamente', async () => {
-      await User.findByIdAndUpdate(user._id, { $addToSet: { readingList: livro._id } });
+      await User.findByIdAndUpdate(user._id, { $addToSet: { readingList: book._id } });
 
       const res = await request(app)
         .get(`/users/${user._id}/reading-list`)
@@ -190,7 +190,7 @@ describe('Users', () => {
 
       expect(res.status).toBe(200);
       expect(res.body.length).toBe(1);
-      expect(res.body[0].titulo).toBe('Outro Livro');
+      expect(res.body[0].title).toBe('Outro Livro');
     });
   });
 });

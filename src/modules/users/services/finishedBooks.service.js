@@ -17,11 +17,11 @@ exports.getFinishedBooks = async (userId) => {
 
   return user.finishedBooks.map((book) => ({
     _id: book._id,
-    titulo: book.titulo,
-    autor: book.autor,
-    descricao: book.descricao,
-    categoria: book.categoria,
-    capa: book.capa,
+    title: book.title,
+    author: book.author,
+    description: book.description,
+    categories: book.categories,
+    cover: book.cover,
     txt: book.txt,
   }));
 };

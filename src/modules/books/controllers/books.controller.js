@@ -1,43 +1,43 @@
 const catchAsync = require('../../../utils/catchAsync');
 const booksService = require('../services/books.service');
 
-exports.createLivro = catchAsync(async (req, res) => {
-  const novoLivro = await booksService.createLivro(req.body);
-  res.status(201).json(novoLivro);
+exports.createBook = catchAsync(async (req, res) => {
+  const newBook = await booksService.createBook(req.body);
+  res.status(201).json(newBook);
 });
 
-exports.updateLivro = catchAsync(async (req, res) => {
-  const livroAtualizado = await booksService.updateLivro(res.livro, req.body);
-  res.json(livroAtualizado);
+exports.updateBook = catchAsync(async (req, res) => {
+  const updatedBook = await booksService.updateBook(res.book, req.body);
+  res.json(updatedBook);
 });
 
-exports.deleteLivro = catchAsync(async (req, res) => {
-  await booksService.deleteLivro(res.livro);
+exports.deleteBook = catchAsync(async (req, res) => {
+  await booksService.deleteBook(res.book);
   res.json({ message: 'Livro deletado' });
 });
 
-exports.getLivros = catchAsync(async (req, res) => {
-  const livros = await booksService.getLivros(req.query);
-  res.json(livros);
+exports.getBooks = catchAsync(async (req, res) => {
+  const books = await booksService.getBooks(req.query);
+  res.json(books);
 });
 
-exports.getPublicLivros = catchAsync(async (req, res) => {
-  const livros = await booksService.getPublicLivros(req.query);
-  res.json(livros);
+exports.getPublicBooks = catchAsync(async (req, res) => {
+  const books = await booksService.getPublicBooks(req.query);
+  res.json(books);
 });
 
-exports.getLivrosComPdf = catchAsync(async (req, res) => {
-  const livros = await booksService.getLivrosComPdf();
-  res.json(livros);
+exports.getBooksWithPdf = catchAsync(async (req, res) => {
+  const books = await booksService.getBooksWithPdf();
+  res.json(books);
 });
 
-exports.getPublicLivro = catchAsync(async (req, res) => {
-  const response = booksService.getPublicLivro(res.livro);
+exports.getPublicBook = catchAsync(async (req, res) => {
+  const response = booksService.getPublicBook(res.book);
   res.json(response);
 });
 
-exports.getLivro = catchAsync(async (req, res) => {
-  const response = await booksService.getLivro(res.livro, req.params.userId, req.user.id);
+exports.getBook = catchAsync(async (req, res) => {
+  const response = await booksService.getBook(res.book, req.params.userId, req.user.id);
   res.json(response);
 });
 

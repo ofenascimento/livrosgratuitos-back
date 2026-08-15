@@ -13,11 +13,11 @@ exports.getFavoriteBooks = async (userId) => {
 
   return user.favoriteBooks.map((book) => ({
     _id: book._id,
-    titulo: book.titulo,
-    autor: book.autor,
-    descricao: book.descricao,
-    categoria: book.categoria,
-    capa: book.capa,
+    title: book.title,
+    author: book.author,
+    description: book.description,
+    categories: book.categories,
+    cover: book.cover,
     txt: book.txt,
     slug: book.slug,
   }));

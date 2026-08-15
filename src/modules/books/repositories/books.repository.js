@@ -1,16 +1,16 @@
-const Livro = require('../../../models/Livro');
+const Book = require('../../../models/Book');
 
-exports.create = (data) => new Livro(data).save();
+exports.create = (data) => new Book(data).save();
 
-exports.findBySlug = (slug) => Livro.findOne({ slug });
+exports.findBySlug = (slug) => Book.findOne({ slug });
 
 exports.findWithPdf = () =>
-  Livro.find({ pdf: { $exists: true, $ne: '' } }).select(
-    'titulo autor descricao categoria capa pdf slug'
+  Book.find({ pdf: { $exists: true, $ne: '' } }).select(
+    'title author description categories cover pdf slug'
   );
 
-exports.aggregate = (pipeline) => Livro.aggregate(pipeline);
+exports.aggregate = (pipeline) => Book.aggregate(pipeline);
 
-exports.save = (livroDoc) => livroDoc.save();
+exports.save = (bookDoc) => bookDoc.save();
 
-exports.deleteOne = (livroDoc) => livroDoc.deleteOne();
+exports.deleteOne = (bookDoc) => bookDoc.deleteOne();

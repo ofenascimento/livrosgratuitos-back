@@ -1,17 +1,17 @@
 const ReadingProgress = require('../../../models/ReadingProgress');
 
-exports.findOneAndUpsert = (userId, livroId, data) =>
+exports.findOneAndUpsert = (userId, bookId, data) =>
   ReadingProgress.findOneAndUpdate(
-    { userId, livroId },
+    { userId, bookId },
     data,
     { new: true, upsert: true }
   );
 
-exports.findOne = (userId, livroId) =>
-  ReadingProgress.findOne({ userId, livroId });
+exports.findOne = (userId, bookId) =>
+  ReadingProgress.findOne({ userId, bookId });
 
 exports.findInProgressByUser = (userId) =>
   ReadingProgress.find({
     userId,
     progressPercentage: { $gt: 0 },
-  }).populate('livroId');
+  }).populate('bookId');

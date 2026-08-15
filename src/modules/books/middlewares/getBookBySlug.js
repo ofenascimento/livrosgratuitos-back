@@ -1,6 +1,6 @@
-const Livro = require('../../../models/Livro');
+const Livro = require('../../../models/Book');
 
-async function getBySlug(req, res, next) {
+async function getBookBySlug(req, res, next) {
     try {
         const livro = await Livro.findOne({ slug: req.params.slug });
 
@@ -15,4 +15,4 @@ async function getBySlug(req, res, next) {
     }
 }
 
-module.exports = getBySlug;
+module.exports = getBookBySlug;

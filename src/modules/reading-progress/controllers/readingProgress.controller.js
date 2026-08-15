@@ -7,11 +7,11 @@ exports.saveProgress = catchAsync(async (req, res) => {
 });
 
 exports.getProgress = catchAsync(async (req, res) => {
-  const progress = await readingProgressService.getProgress(req.user.id, req.params.livroId);
+  const progress = await readingProgressService.getProgress(req.user.id, req.params.bookId);
   res.json(progress || null);
 });
 
 exports.getEpubReadingList = catchAsync(async (req, res) => {
-  const epubsEmProgresso = await readingProgressService.getEpubReadingList(req.user.id);
-  res.json(epubsEmProgresso);
+  const epubReadingList = await readingProgressService.getEpubReadingList(req.user.id);
+  res.json(epubReadingList);
 });
